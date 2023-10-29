@@ -163,7 +163,7 @@ class CanvasOp {
             tx = t * tileSize + t * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2;
             ty = s * tileSize + s * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - 100;
             const ctx = CORE.ctx;
-            ctx.font = '90px fantasy';
+            ctx.font = "90px 'Impact'";
             ctx.fillStyle = "#000000";
             var textWidth = ctx.measureText("S").width;
             ctx.fillText("S", tx + (tileSize - textWidth) / 2, ty + tileSize - 10);
@@ -173,7 +173,7 @@ class CanvasOp {
             tx = t * tileSize + t * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2;
             ty = s * tileSize + s * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - 100;
             const ctx = CORE.ctx;
-            ctx.font = '90px fantasy';
+            ctx.font = "90px 'Impact'";
             ctx.fillStyle = "#000000";
             var textWidth = ctx.measureText("G").width;
             ctx.fillText("G", tx + (tileSize - textWidth) / 2, ty + tileSize - 10);
@@ -202,7 +202,7 @@ window.onload = function () {
     }
     {
         ctx = CORE.ctx;
-        ctx.font = '60px fantasy';
+        ctx.font = "60px 'Impact'";
         ctx.fillStyle = "#000000";
         var textWidth = ctx.measureText("SENSOR").width;
         ctx.fillText("SENSOR", 80, 1250);
@@ -308,7 +308,7 @@ window.onload = function () {
         ctx.lineWidth = 8;
         ctx.stroke();
 
-        ctx.font = '90px fantasy';
+        ctx.font = "90px 'Impact'";
         ctx.fillStyle = "#000000";
         var textWidth = ctx.measureText("U").width;
         ctx.fillText("U", p + (K - textWidth) / 2, q + K - 10);
@@ -333,7 +333,7 @@ window.onload = function () {
         ctx.lineWidth = 8;
         ctx.stroke();
 
-        ctx.font = '90px fantasy';
+        ctx.font = "90px 'Impact'";
         ctx.fillStyle = "#000000";
         var textWidth = ctx.measureText("D").width;
         ctx.fillText("D", p + (K - textWidth) / 2, q + K - 10);
@@ -358,7 +358,7 @@ window.onload = function () {
         ctx.lineWidth = 8;
         ctx.stroke();
 
-        ctx.font = '90px fantasy';
+        ctx.font = "90px 'Impact'";
         ctx.fillStyle = "#000000";
         var textWidth = ctx.measureText("L").width;
         ctx.fillText("L", p + (K - textWidth) / 2, q + K - 10);
@@ -383,7 +383,7 @@ window.onload = function () {
         ctx.lineWidth = 8;
         ctx.stroke();
 
-        ctx.font = '90px fantasy';
+        ctx.font = "90px 'Impact'";
         ctx.fillStyle = "#000000";
         var textWidth = ctx.measureText("R").width;
         ctx.fillText("R", p + (K - textWidth) / 2, q + K - 10);
