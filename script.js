@@ -390,7 +390,7 @@ window.onload = function () {
     }
     {
         const ctx = CORE.ctx;
-        ctx.font = '100px fantasy';
+        ctx.font = "100px 'Impact'";
         ctx.fillStyle = t_col;
         var textWidth = ctx.measureText("Turn : " + turn.toString(10)).width;
         ctx.fillText("Turn : " + turn.toString(10), (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 - 500);
@@ -462,7 +462,7 @@ window.onload = function () {
 function isClear() {
     if (now_x == 4 && now_y == 4) {
         const ctx = CORE.ctx;
-        ctx.font = '80px fantasy';
+        ctx.font = "80px 'Impact'";
         ctx.fillStyle = "#cc0000";
         var textWidth = ctx.measureText("CLEAR").width;
         ctx.fillText("CLEAR", (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 + 300);
@@ -471,7 +471,7 @@ function isClear() {
 function isFail() {
     if (now_x == oni_x && now_y == oni_y) {
         const ctx = CORE.ctx;
-        ctx.font = '80px fantasy';
+        ctx.font = "80px Impact";
         ctx.fillStyle = "#0000cc";
         var textWidth = ctx.measureText("FAIL").width;
         ctx.fillText("FAIL", (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 + 300);
@@ -492,7 +492,7 @@ function checkTiles0(e) {
         turn += 1;
         now_x -= 1;
         const ctx = CORE.ctx;
-        ctx.font = '100px fantasy';
+        ctx.font = "100px 'Impact'";
         ctx.fillStyle = t_col;
         ctx.clearRect(0, CANVAS_HEIGHT / 2 - 600, CANVAS_WIDTH, 120);
         var textWidth = ctx.measureText("Turn : " + turn.toString(10)).width;
@@ -523,7 +523,7 @@ function checkTiles1(e) {
         turn += 1;
         now_x += 1;
         const ctx = CORE.ctx;
-        ctx.font = '100px fantasy';
+        ctx.font = "100px 'Impact'";
         ctx.fillStyle = t_col;
         ctx.clearRect(0, CANVAS_HEIGHT / 2 - 600, CANVAS_WIDTH, 120);
         var textWidth = ctx.measureText("Turn : " + turn.toString(10)).width;
@@ -554,7 +554,7 @@ function checkTiles2(e) {
         turn += 1;
         now_y -= 1;
         const ctx = CORE.ctx;
-        ctx.font = '100px fantasy';
+        ctx.font = "100px 'Impact'";
         ctx.fillStyle = t_col;
         ctx.clearRect(0, CANVAS_HEIGHT / 2 - 600, CANVAS_WIDTH, 120);
         var textWidth = ctx.measureText("Turn : " + turn.toString(10)).width;
@@ -585,7 +585,7 @@ function checkTiles3(e) {
         turn += 1;
         now_y += 1;
         const ctx = CORE.ctx;
-        ctx.font = '100px fantasy';
+        ctx.font = "100px 'Impact'";
         ctx.fillStyle = t_col;
         ctx.clearRect(0, CANVAS_HEIGHT / 2 - 600, CANVAS_WIDTH, 120);
         var textWidth = ctx.measureText("Turn : " + turn.toString(10)).width;
