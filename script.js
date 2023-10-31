@@ -71,9 +71,6 @@ function rectFill(x, y, w, h, color) {
     ctx.fillRect(x, y, w, h);
 }
 
-/***********************
-ここからライツアウトのプログラム
-************************/
 const CANVAS_HEIGHT = 1334;
 const CANVAS_WIDTH = 750;
 const RED = "#ffffff";
@@ -115,22 +112,39 @@ const tiles = [];
 const Len = 5;
 now_x = 4, now_y = 0;
 oni_x = 4, oni_y = 3;
-let turn = 1;
+turn = 1;
+flag = 0;
+f_t = 1000000000;
 t_col = "#000000";
-const V = 1000, D = 40, L = 30, K = 105;
-const seq_p = [[4,1],[4,4]];
+const V = 1050, D = 40, L = 30, K = 105;
+const seq_p = [[4, 1], [4, 4]];
 const seq_q = [[1, 2]];
 const Blocks = [];
-a = 0, b = 0;
+t_c = 0;
 p = 0, q = 0;
 time = 0;
 tmp = 0;
-C = 5;
+const C = 5;
 tx = 0, ty = 0;
 s = 0, t = 0;
+vc = [0, 0, 0];
+mn = 20.0;
+const dx = [[0, -1], [-1, 0], [1, 0], [0, 1]];
+tx = 0, ty = 0, ox = 0, oy = 0;
+a = 0, b = 0;
+f_tmp = 0;
+eps = 0.0;
+isEnd = 0;
+s = 0;
 class CanvasOp {
     update(timestamp) {
         const ctx = CORE.ctx;
+        ctx.clearRect((CANVAS_WIDTH - 200) / 2, CANVAS_HEIGHT / 2 + 270, 200, 100);
+        ctx.font = "100px 'Impact'";
+        ctx.fillStyle = t_col;
+        ctx.clearRect(0, CANVAS_HEIGHT / 2 - 600, CANVAS_WIDTH, 120);
+        var textWidth = ctx.measureText("Turn : " + turn.toString(10)).width;
+        ctx.fillText("Turn : " + turn.toString(10), (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 - 500);
         time = performance.now() / 400;
         time -= Math.floor(time / 4) * 4;
         if (time < 1) {
@@ -145,23 +159,27 @@ class CanvasOp {
         else {
             tmp = ((4 - time) * (4 - time) - 1) * 3.14 / C;
         }
-        p = a * Math.cos(tmp) - b * Math.sin(tmp);
-        q = a * Math.sin(tmp) + b * Math.cos(tmp);
-        ctx.clearRect(60, 890, 220, 270);
+        t_c = Math.sqrt((oni_x - now_x) * (oni_x - now_x) + (oni_y - now_y) * (oni_y - now_y));
+        if (t_c == 0) {
+            t_c = 1;
+        }
+        p = (oni_x - now_x) / t_c * Math.cos(tmp + eps * 3.14) - (oni_y - now_y) / t_c * Math.sin(tmp + eps * 3.14);
+        q = (oni_x - now_x) / t_c * Math.sin(tmp + eps * 3.14) + (oni_y - now_y) / t_c * Math.cos(tmp + eps * 3.14);
+        ctx.clearRect(60, 1020, 220, 220);
         ctx.beginPath();
-        ctx.moveTo(170, 1050);
-        ctx.lineTo(170 + q * 100, 1050 + p * 100);
+        ctx.moveTo(170, 1130);
+        ctx.lineTo(170 + q * 100, 1130 + p * 100);
         ctx.closePath();
         ctx.strokeStyle = "#000000";
         ctx.lineWidth = 8;
         ctx.stroke();
-        ctx.arc(170, 1050, 10, 0 * Math.PI / 180, 360 * Math.PI / 180, false);
+        ctx.arc(170, 1130, 10, 0 * Math.PI / 180, 360 * Math.PI / 180, false);
         ctx.fillStyle = "#000000";
         ctx.fill();
         {
             s = 4, t = 0;
             tx = t * tileSize + t * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2;
-            ty = s * tileSize + s * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - 100;
+            ty = s * tileSize + s * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - 50;
             const ctx = CORE.ctx;
             ctx.font = "90px 'Impact'";
             ctx.fillStyle = "#000000";
@@ -171,17 +189,79 @@ class CanvasOp {
         {
             s = 4, t = 4;
             tx = t * tileSize + t * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2;
-            ty = s * tileSize + s * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - 100;
+            ty = s * tileSize + s * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - 50;
             const ctx = CORE.ctx;
             ctx.font = "90px 'Impact'";
             ctx.fillStyle = "#000000";
             var textWidth = ctx.measureText("G").width;
             ctx.fillText("G", tx + (tileSize - textWidth) / 2, ty + tileSize - 10);
         }
+        isClear();
+        isFail();
+        if (!flag) {
+            const ctx = CORE.ctx;
+            ctx.font = "60px 'Impact'";
+            ctx.fillStyle = "#cc0000";
+            var textWidth = ctx.measureText("YOUR TURN").width;
+            ctx.clearRect((CW - 300) / 2, 180, 300, 80);
+            ctx.fillText("YOUR TURN", (CW - textWidth) / 2, 250);
+        }
+        else {
+            const ctx = CORE.ctx;
+            ctx.font = "60px 'Impact'";
+            ctx.fillStyle = "#0000cc";
+            var textWidth = ctx.measureText("DEMON TURN").width;
+            ctx.clearRect((CW - 300) / 2, 180, 300, 80);
+            ctx.fillText("DEMON TURN", (CW - textWidth) / 2, 250);
+        }
+        if (performance.now() / 1000 - f_t >= 1 && !isEnd) {
+            flag = 0, f_t = 1000000000;
+            tiles[oni_x][oni_y].color = "#999999";
+            tiles[oni_x][oni_y].draw();
+            mn = 20.0;
+            for (i = 0; i < 4; ++i) {
+                tx = oni_x + dx[i][0], ty = oni_y + dx[i][1];
+                ox = now_x, oy = now_y;
+                if (tx < 0 || ty < 0 || 5 <= tx || 5 <= ty) continue;
+                if (Math.abs(dx[i][1]) == 1) {
+                    a = tx, b = Math.max(oni_y, ty);
+                    f_tmp = 1;
+                    for (t = 0; t < seq_p.length; ++t) {
+                        if (a == seq_p[t][0] && b == seq_p[t][1]) {
+                            f_tmp = 0;
+                        }
+                    }
+                    if (f_tmp == 0) {
+                        continue;
+                    }
+                }
+                if (Math.abs(dx[i][0]) == 1) {
+                    a = Math.max(oni_x, tx), b = ty;
+                    f_tmp = 1;
+                    for (t = 0; t < seq_q.length; ++t) {
+                        if (a == seq_q[t][0] && b == seq_q[t][1]) {
+                            f_tmp = 0;
+                        }
+                    }
+                    if (f_tmp == 0) {
+                        continue;
+                    }
+                }
+                if (Math.sqrt((tx - ox) * (tx - ox) + (ty - oy) * (ty - oy)) <= mn) {
+                    vc = [i, tx - ox, ty - oy];
+                    mn = Math.sqrt((tx - ox) * (tx - ox) + (ty - oy) * (ty - oy));
+                }
+            }
+            oni_x += dx[vc[0]][0], oni_y += dx[vc[0]][1];
+            tiles[oni_x][oni_y].color = ONI_COLOR;
+            tiles[oni_x][oni_y].draw();
+            eps = Math.random() / C - 1.0 / (2 * C);
+        }
         window.requestAnimationFrame((timestamp) => this.update(timestamp));
     }
 }
 
+const ONI_COLOR = "#999999";
 window.onload = function () {
     CORE.setup(CANVAS_WIDTH, CANVAS_HEIGHT);
     s = getRandomInt(5);
@@ -205,24 +285,24 @@ window.onload = function () {
         ctx.font = "60px 'Impact'";
         ctx.fillStyle = "#000000";
         var textWidth = ctx.measureText("SENSOR").width;
-        ctx.fillText("SENSOR", 80, 1250);
+        ctx.fillText("SENSOR", 80, 1300);
     }
     for (let i = 0; i < 5; i++) {
         tiles[i] = [];
         for (let j = 0; j < 5; j++) {
             const tile = new Tile();
             tile.x = j * tileSize + j * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2;
-            tile.y = i * tileSize + i * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - 100;
+            tile.y = i * tileSize + i * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - 50;
             tile.row = i;
             tile.col = j;
             if (i == 4 && j == 0) {
                 tile.color = RED;
                 tile.draw();
             }
-            /*if (i == oni_x && j == oni_y) {
-                tile.color = "#00ffff";
+            if (i == oni_x && j == oni_y) {
+                tile.color = ONI_COLOR;
                 tile.draw();
-            }*/
+            }
             tiles[i][j] = tile;
         }
     }
@@ -230,26 +310,18 @@ window.onload = function () {
         for (let j = 0; j < 6; j++) {
             const tile = new Block();
             tile.x = j * tileSize + j * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2 - margin;
-            tile.y = i * tileSize + i * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - 100 - margin;
+            tile.y = i * tileSize + i * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - 50 - margin;
             tile.row = margin;
             tile.col = margin;
             tile.color = "#000000";
             tile.draw();
         }
     }
-    {
-        mn = Math.sqrt((oni_x - now_x) * (oni_x - now_x) + (oni_y - now_y) * (oni_y - now_y));
-        a = (oni_x - now_x) / mn, b = (oni_y - now_y) / mn;
-        theta = (Math.random() / C - 1.0 / (2 * C)) * 3.14;
-        x = a * Math.cos(theta) - b * Math.sin(theta);
-        y = a * Math.sin(theta) + b * Math.cos(theta);
-        a = x, b = y;
-    }
     for (i = 0; i < 5; ++i) {
         for (j = 0; j < 6; ++j) {
             const tile = new Block();
             tile.x = j * tileSize + (j - 1) * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2;
-            tile.y = i * tileSize + i * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - 100;
+            tile.y = i * tileSize + i * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - 50;
             tile.row = margin;
             tile.col = tileSize;
             tile.color = "#000000";
@@ -260,7 +332,7 @@ window.onload = function () {
         i = seq_p[t][0], j = seq_p[t][1];
         const tile = new Block();
         tile.x = j * tileSize + (j - 1) * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2;
-        tile.y = i * tileSize + i * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - 100;
+        tile.y = i * tileSize + i * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - 50;
         tile.row = margin;
         tile.col = tileSize;
         tile.color = "#00cc00";
@@ -270,7 +342,7 @@ window.onload = function () {
         for (j = 0; j < 5; ++j) {
             const tile = new Block();
             tile.x = j * tileSize + j * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2;
-            tile.y = i * tileSize + (i - 1) * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - 100;
+            tile.y = i * tileSize + (i - 1) * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - 50;
             tile.row = tileSize;
             tile.col = margin;
             tile.color = "#000000";
@@ -281,7 +353,7 @@ window.onload = function () {
         i = seq_q[t][0], j = seq_q[t][1];
         const tile = new Block();
         tile.x = j * tileSize + j * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2;
-        tile.y = i * tileSize + (i - 1) * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - 100;
+        tile.y = i * tileSize + (i - 1) * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - 50;
         tile.row = tileSize;
         tile.col = margin;
         tile.color = "#00cc00";
@@ -341,13 +413,13 @@ window.onload = function () {
     {
         const tile = new Block();
         tile.x = CW / 2 - K / 2 - L - K + 150;
-        tile.y = V + K / 2 + D;
+        tile.y = V + K / 2 + D / 2;
         tile.row = K;
         tile.col = K;
         tile.color = "#cccccc";
         Blocks[2] = tile;
         tile.draw();
-        p = CW / 2 - K / 2 - L - K + 150, q = V + K / 2 + D;
+        p = CW / 2 - K / 2 - L - K + 150, q = V + K / 2 + D / 2;
         const ctx = CORE.ctx;
         ctx.moveTo(p, q);
         ctx.lineTo(p + K, q);
@@ -366,13 +438,13 @@ window.onload = function () {
     {
         const tile = new Block();
         tile.x = CW / 2 + K / 2 + L + 150;
-        tile.y = V + K / 2 + D;
+        tile.y = V + K / 2 + D / 2;
         tile.row = K;
         tile.col = K;
         tile.color = "#cccccc";
         Blocks[3] = tile;
         tile.draw();
-        p = CW / 2 + K / 2 + L + 150, q = V + K / 2 + D;
+        p = CW / 2 + K / 2 + L + 150, q = V + K / 2 + D / 2;
         const ctx = CORE.ctx;
         ctx.moveTo(p, q);
         ctx.lineTo(p + K, q);
@@ -388,93 +460,71 @@ window.onload = function () {
         var textWidth = ctx.measureText("R").width;
         ctx.fillText("R", p + (K - textWidth) / 2, q + K - 10);
     }
-    {
-        const ctx = CORE.ctx;
-        ctx.font = "100px 'Impact'";
-        ctx.fillStyle = t_col;
-        var textWidth = ctx.measureText("Turn : " + turn.toString(10)).width;
-        ctx.fillText("Turn : " + turn.toString(10), (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 - 500);
-    }
     canvas = new CanvasOp();
     canvas.update(0);
     CORE.canvas.addEventListener("pointerdown", (e) => {
-        f = false;
-        f |= checkTiles0(e);
-        f |= checkTiles1(e);
-        f |= checkTiles2(e);
-        f |= checkTiles3(e);
-        isClear();
-        isFail();
-        if (f) {
-            /*tiles[oni_x][oni_y].color = "#777777";
-            tiles[oni_x][oni_y].draw();*/
-            vc = [0, 0, 0];
-            mn = 20.0;
-            dx = [[0, -1], [-1, 0], [1, 0], [0, 1]];
-            for (i = 0; i < 4; ++i) {
-                tx = oni_x + dx[i][0], ty = oni_y + dx[i][1];
-                ox = now_x, oy = now_y;
-                if (tx < 0 || ty < 0 || 5 <= tx || 5 <= ty) continue;
-                if (Math.abs(dx[i][1]) == 1) {
-                    a = tx, b = Math.max(oni_y, ty);
-                    f = 1;
-                    for (t = 0; t < seq_p.length; ++t) {
-                        if (a == seq_p[t][0] && b == seq_p[t][1]) {
-                            f = 0;
-                        }
-                    }
-                    if (f == 0) {
-                        continue;
-                    }
-                }
-                if (Math.abs(dx[i][0]) == 1) {
-                    a = Math.max(oni_x, tx), b = ty;
-                    f = 1;
-                    for (t = 0; t < seq_q.length; ++t) {
-                        if (a == seq_q[t][0] && b == seq_q[t][1]) {
-                            f = 0;
-                        }
-                    }
-                    if (f == 0) {
-                        continue;
-                    }
-                }
-                if (Math.sqrt((tx - ox) * (tx - ox) + (ty - oy) * (ty - oy)) <= mn) {
-                    vc = [i, tx - ox, ty - oy];
-                    mn = Math.sqrt((tx - ox) * (tx - ox) + (ty - oy) * (ty - oy));
-                }
+        if (!flag && !isEnd) {
+            f = false;
+            f |= checkTiles0(e);
+            f |= checkTiles1(e);
+            f |= checkTiles2(e);
+            f |= checkTiles3(e);
+            if (f) {
+                flag = 1, f_t = performance.now() / 1000;
             }
-            oni_x += dx[vc[0]][0], oni_y += dx[vc[0]][1];
-            if (mn == 0) {
-                mn = 1;
-            }
-            /*tiles[oni_x][oni_y].color = "#00ffff";
-            tiles[oni_x][oni_y].draw();*/
-            a = vc[1] / mn, b = vc[2] / mn;
-            theta = (Math.random() / C - 1.0 / (C * 2)) * 3.14;
-            x = a * Math.cos(theta) - b * Math.sin(theta);
-            y = a * Math.sin(theta) + b * Math.cos(theta);
-            a = x, b = y;
         }
-        isFail();
+        if (isEnd) {
+            tiles[oni_x][oni_y].color = "#999999";
+            tiles[oni_x][oni_y].draw();
+            tiles[now_x][now_y].color = "#999999";
+            tiles[now_x][now_y].draw();
+            now_x = 4, now_y = 0;
+            s = getRandomInt(5);
+            if (s == 0) {
+                oni_x = 3, oni_y = 4;
+            }
+            if (s == 1) {
+                oni_x = 4, oni_y = 3;
+            }
+            if (s == 2) {
+                oni_x = 2, oni_y = 3;
+            }
+            if (s == 3) {
+                oni_x = 1, oni_y = 4;
+            }
+            if (s == 4) {
+                oni_x = 0, oni_y = 3;
+            }
+            tiles[now_x][now_y].color = "#ffffff";
+            tiles[now_x][now_y].draw();
+            tiles[oni_x][oni_y].color = ONI_COLOR;
+            tiles[oni_x][oni_y].draw();
+            eps = Math.random() / C - 1.0 / (2 * C);
+            turn = 1;
+            flag = 0;
+            f_t = 1000000000;
+            isEnd = 0;
+        }
     });
 }
 function isClear() {
     if (now_x == 4 && now_y == 4) {
+        isEnd = 1;
         const ctx = CORE.ctx;
         ctx.font = "80px 'Impact'";
         ctx.fillStyle = "#cc0000";
         var textWidth = ctx.measureText("CLEAR").width;
-        ctx.fillText("CLEAR", (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 + 300);
+        ctx.fillText("CLEAR", (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 + 350);
     }
 }
 function isFail() {
     if (now_x == oni_x && now_y == oni_y) {
+        isEnd = 1;
         const ctx = CORE.ctx;
         ctx.font = "80px Impact";
         ctx.fillStyle = "#0000cc";
         var textWidth = ctx.measureText("FAIL").width;
-        ctx.fillText("FAIL", (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 + 300);
+        ctx.fillText("FAIL", (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 + 350);
     }
 }
 function checkTiles0(e) {
@@ -489,14 +539,9 @@ function checkTiles0(e) {
                 return false;
             }
         }
+        eps = Math.random() / C - 1.0 / (2 * C);
         turn += 1;
         now_x -= 1;
-        const ctx = CORE.ctx;
-        ctx.font = "100px 'Impact'";
-        ctx.fillStyle = t_col;
-        ctx.clearRect(0, CANVAS_HEIGHT / 2 - 600, CANVAS_WIDTH, 120);
-        var textWidth = ctx.measureText("Turn : " + turn.toString(10)).width;
-        ctx.fillText("Turn : " + turn.toString(10), (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 - 500);
         const row = tile.row;
         const col = tile.col;
         tiles[i - 1][j].color = RED;
@@ -520,14 +565,9 @@ function checkTiles1(e) {
                 return false;
             }
         }
+        eps = Math.random() / C - 1.0 / (2 * C);
         turn += 1;
         now_x += 1;
-        const ctx = CORE.ctx;
-        ctx.font = "100px 'Impact'";
-        ctx.fillStyle = t_col;
-        ctx.clearRect(0, CANVAS_HEIGHT / 2 - 600, CANVAS_WIDTH, 120);
-        var textWidth = ctx.measureText("Turn : " + turn.toString(10)).width;
-        ctx.fillText("Turn : " + turn.toString(10), (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 - 500);
         const row = tile.row;
         const col = tile.col;
         tiles[i + 1][j].color = RED;
@@ -551,14 +591,9 @@ function checkTiles2(e) {
                 return false;
             }
         }
+        eps = Math.random() / C - 1.0 / (2 * C);
         turn += 1;
         now_y -= 1;
-        const ctx = CORE.ctx;
-        ctx.font = "100px 'Impact'";
-        ctx.fillStyle = t_col;
-        ctx.clearRect(0, CANVAS_HEIGHT / 2 - 600, CANVAS_WIDTH, 120);
-        var textWidth = ctx.measureText("Turn : " + turn.toString(10)).width;
-        ctx.fillText("Turn : " + turn.toString(10), (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 - 500);
         const row = tile.row;
         const col = tile.col;
         tiles[i][j - 1].color = RED;
@@ -582,14 +617,9 @@ function checkTiles3(e) {
                 return false;
             }
         }
+        eps = Math.random() / C - 1.0 / (2 * C);
         turn += 1;
         now_y += 1;
-        const ctx = CORE.ctx;
-        ctx.font = "100px 'Impact'";
-        ctx.fillStyle = t_col;
-        ctx.clearRect(0, CANVAS_HEIGHT / 2 - 600, CANVAS_WIDTH, 120);
-        var textWidth = ctx.measureText("Turn : " + turn.toString(10)).width;
-        ctx.fillText("Turn : " + turn.toString(10), (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 - 500);
         const row = tile.row;
         const col = tile.col;
         tiles[i][j + 1].color = RED;
