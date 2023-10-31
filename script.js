@@ -479,7 +479,7 @@ window.onload = function () {
         tile.y = i * tileSize + i * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - LL;
         tile.row = margin;
         tile.col = tileSize;
-        tile.color = "#00cc00";
+        tile.color = "#11aa11";
         tile.draw();
     }
     for (i = 0; i < 6; ++i) {
@@ -500,7 +500,7 @@ window.onload = function () {
         tile.y = i * tileSize + (i - 1) * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - LL;
         tile.row = tileSize;
         tile.col = margin;
-        tile.color = "#00cc00";
+        tile.color = "#11aa11";
         tile.draw();
     }
     
