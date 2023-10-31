@@ -147,6 +147,111 @@ var fontFace = new FontFace(
 class CanvasOp {
     update(timestamp) {
         const ctx = CORE.ctx;
+        ctx.font = "60px deathspirit";
+        ctx.fillStyle = "#000000";
+        ctx.clearRect(80, 1010, 250, 70);
+        ctx.fillText("SENSOR", 80, 1070);
+        {
+            const tile = new Block();
+            tile.x = CW / 2 - K / 2 + 150;
+            tile.y = V;
+            tile.row = K;
+            tile.col = K;
+            ctx.clearRect(tile.x, tile.y, tile.row, tile.col);
+            tile.color = "#cccccc";
+            Blocks[0] = tile;
+            tile.draw();
+            ctx.beginPath();
+            p = CW / 2 - K / 2 + 150, q = V;
+            ctx.moveTo(p, q);
+            ctx.lineTo(p + K, q);
+            ctx.lineTo(p + K, q + K);
+            ctx.lineTo(p, q + K);
+            ctx.closePath();
+            ctx.strokeStyle = "#000000";
+            ctx.lineWidth = 8;
+            ctx.stroke();
+
+            ctx.font = "90px deathspirit";
+            ctx.fillStyle = "#000000";
+            var textWidth = ctx.measureText("U").width;
+            ctx.fillText("U", p + (K - textWidth) / 2, q + K - 10);
+        }
+        {
+            const tile = new Block();
+            tile.x = CW / 2 - K / 2 + 150;
+            tile.y = V + K + D;
+            tile.row = K;
+            tile.col = K;
+            ctx.clearRect(tile.x, tile.y, tile.row, tile.col);
+            tile.color = "#cccccc";
+            Blocks[1] = tile;
+            tile.draw();
+            p = CW / 2 - K / 2 + 150, q = V + K + D
+            ctx.moveTo(p, q);
+            ctx.lineTo(p + K, q);
+            ctx.lineTo(p + K, q + K);
+            ctx.lineTo(p, q + K);
+            ctx.closePath();
+            ctx.strokeStyle = "#000000";
+            ctx.lineWidth = 8;
+            ctx.stroke();
+
+            ctx.font = "90px deathspirit";
+            ctx.fillStyle = "#000000";
+            var textWidth = ctx.measureText("D").width;
+            ctx.fillText("D", p + (K - textWidth) / 2, q + K - 10);
+        }
+        {
+            const tile = new Block();
+            tile.x = CW / 2 - K / 2 - L - K + 150;
+            tile.y = V + K / 2 + D / 2;
+            tile.row = K;
+            tile.col = K;
+            ctx.clearRect(tile.x, tile.y, tile.row, tile.col);
+            tile.color = "#cccccc";
+            Blocks[2] = tile;
+            tile.draw();
+            p = CW / 2 - K / 2 - L - K + 150, q = V + K / 2 + D / 2;
+            ctx.moveTo(p, q);
+            ctx.lineTo(p + K, q);
+            ctx.lineTo(p + K, q + K);
+            ctx.lineTo(p, q + K);
+            ctx.closePath();
+            ctx.strokeStyle = "#000000";
+            ctx.lineWidth = 8;
+            ctx.stroke();
+
+            ctx.font = "90px deathspirit";
+            ctx.fillStyle = "#000000";
+            var textWidth = ctx.measureText("L").width;
+            ctx.fillText("L", p + (K - textWidth) / 2, q + K - 10);
+        }
+        {
+            const tile = new Block();
+            tile.x = CW / 2 + K / 2 + L + 150;
+            tile.y = V + K / 2 + D / 2;
+            tile.row = K;
+            tile.col = K;
+            ctx.clearRect(tile.x, tile.y, tile.row, tile.col);
+            tile.color = "#cccccc";
+            Blocks[3] = tile;
+            tile.draw();
+            p = CW / 2 + K / 2 + L + 150, q = V + K / 2 + D / 2;
+            ctx.moveTo(p, q);
+            ctx.lineTo(p + K, q);
+            ctx.lineTo(p + K, q + K);
+            ctx.lineTo(p, q + K);
+            ctx.closePath();
+            ctx.strokeStyle = "#000000";
+            ctx.lineWidth = 8;
+            ctx.stroke();
+
+            ctx.font = "90px deathspirit";
+            ctx.fillStyle = "#000000";
+            var textWidth = ctx.measureText("R").width;
+            ctx.fillText("R", p + (K - textWidth) / 2, q + K - 10);
+        }
         ctx.font = "90px deathspirit";
         ctx.fillStyle = t_col;
         ctx.clearRect(0, CANVAS_HEIGHT / 2 - 600, CANVAS_WIDTH, 120);
@@ -183,21 +288,30 @@ class CanvasOp {
         ctx.arc(170, 1190, 10, 0 * Math.PI / 180, 360 * Math.PI / 180, false);
         ctx.fillStyle = "#000000";
         ctx.fill();
-        if (performance.now() / 1000 > 0.5) {
-                s = 4, t = 0;
-                tx = t * tileSize + t * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2;
-                ty = s * tileSize + s * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - LL;
-                const ctx = CORE.ctx;
-                ctx.font = "90px deathspirit";
-                ctx.fillStyle = "#000000";
-                var textWidth = ctx.measureText("S").width;
-                ctx.fillText("S", tx + (tileSize - textWidth) / 2, ty + tileSize - 10);
+        {
+            s = 4, t = 0;
+            tx = t * tileSize + t * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2;
+            ty = s * tileSize + s * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - LL;
+            ctx.clearRect(tx, ty, tileSize, tileSize);
+            t = 4;
+            tx = t * tileSize + t * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2;
+            ty = s * tileSize + s * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - LL;
+            ctx.clearRect(tx, ty, tileSize, tileSize);
         }
-        if (performance.now() / 1000 > 0.5) {
+        tiles[now_x][now_y].draw();
+        {
+            s = 4, t = 0;
+            tx = t * tileSize + t * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2;
+            ty = s * tileSize + s * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - LL;
+            ctx.font = "90px deathspirit";
+            ctx.fillStyle = "#000000";
+            var textWidth = ctx.measureText("S").width;
+            ctx.fillText("S", tx + (tileSize - textWidth) / 2, ty + tileSize - 10);
+        }
+        {
             s = 4, t = 4;
             tx = t * tileSize + t * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2;
             ty = s * tileSize + s * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - LL;
-            const ctx = CORE.ctx;
             ctx.font = "90px deathspirit";
             ctx.fillStyle = "#000000";
             var textWidth = ctx.measureText("G").width;
@@ -229,7 +343,7 @@ class CanvasOp {
             ctx.font = "40px deathspirit";
             ctx.fillStyle = "#cccccc";
             var textWidth = ctx.measureText("TAP : CONTINUE").width;
-            ctx.fillText("TAP : CONTINUE", (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 - 360);
+            ctx.fillText("TAP : CONTINUE", (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 - 340);
         }
         if (isEnd && now_x == oni_x && now_y == oni_y) {
             ctx.font = "70px deathspirit";
@@ -240,12 +354,12 @@ class CanvasOp {
             ctx.font = "40px deathspirit";
             ctx.fillStyle = "#cccccc";
             var textWidth = ctx.measureText("TAP : CONTINUE").width;
-            ctx.fillText("TAP : CONTINUE", (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 - 360);
+            ctx.fillText("TAP : CONTINUE", (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 - 340);
         }
         if (performance.now() / 1000 - f_t >= 1 && !isEnd) {
             flag = 0, f_t = 1000000000;
-            tiles[oni_x][oni_y].color = "#999999";
-            tiles[oni_x][oni_y].draw();
+         /*   tiles[oni_x][oni_y].color = "#999999";
+            tiles[oni_x][oni_y].draw();*/
             mn = 20.0;
             for (i = 0; i < 4; ++i) {
                 tx = oni_x + dx[i][0], ty = oni_y + dx[i][1];
@@ -281,8 +395,8 @@ class CanvasOp {
                 }
             }
             oni_x += dx[vc[0]][0], oni_y += dx[vc[0]][1];
-            tiles[oni_x][oni_y].color = ONI_COLOR;
-            tiles[oni_x][oni_y].draw();
+          /*  tiles[oni_x][oni_y].color = ONI_COLOR;
+            tiles[oni_x][oni_y].draw();*/
             eps = Math.random() / C - 1.0 / (2 * C);
         }
         window.requestAnimationFrame((timestamp) => this.update(timestamp));
@@ -294,111 +408,6 @@ const ONI_COLOR = "#999999";
 fontFace.load().then(function (loadedFace) {
     document.fonts.add(loadedFace);
     document.body.style.fontFamily = '"deathspirit"';
-    const ctx = CORE.ctx;
-    ctx.font = "60px deathspirit";
-    ctx.fillStyle = "#000000";
-    ctx.fillText("SENSOR", 80, 1070);
-    {
-        const tile = new Block();
-        tile.x = CW / 2 - K / 2 + 150;
-        tile.y = V;
-        tile.row = K;
-        tile.col = K;
-        tile.color = "#cccccc";
-        Blocks[0] = tile;
-        tile.draw();
-        const ctx = CORE.ctx;
-        ctx.beginPath();
-        p = CW / 2 - K / 2 + 150, q = V;
-        ctx.moveTo(p, q);
-        ctx.lineTo(p + K, q);
-        ctx.lineTo(p + K, q + K);
-        ctx.lineTo(p, q + K);
-        ctx.closePath();
-        ctx.strokeStyle = "#000000";
-        ctx.lineWidth = 8;
-        ctx.stroke();
-
-        ctx.font = "90px deathspirit";
-        ctx.fillStyle = "#000000";
-        var textWidth = ctx.measureText("U").width;
-        ctx.fillText("U", p + (K - textWidth) / 2, q + K - 10);
-    }
-    {
-        const tile = new Block();
-        tile.x = CW / 2 - K / 2 + 150;
-        tile.y = V + K + D;
-        tile.row = K;
-        tile.col = K;
-        tile.color = "#cccccc";
-        Blocks[1] = tile;
-        tile.draw();
-        p = CW / 2 - K / 2 + 150, q = V + K + D;
-        const ctx = CORE.ctx;
-        ctx.moveTo(p, q);
-        ctx.lineTo(p + K, q);
-        ctx.lineTo(p + K, q + K);
-        ctx.lineTo(p, q + K);
-        ctx.closePath();
-        ctx.strokeStyle = "#000000";
-        ctx.lineWidth = 8;
-        ctx.stroke();
-
-        ctx.font = "90px deathspirit";
-        ctx.fillStyle = "#000000";
-        var textWidth = ctx.measureText("D").width;
-        ctx.fillText("D", p + (K - textWidth) / 2, q + K - 10);
-    }
-    {
-        const tile = new Block();
-        tile.x = CW / 2 - K / 2 - L - K + 150;
-        tile.y = V + K / 2 + D / 2;
-        tile.row = K;
-        tile.col = K;
-        tile.color = "#cccccc";
-        Blocks[2] = tile;
-        tile.draw();
-        p = CW / 2 - K / 2 - L - K + 150, q = V + K / 2 + D / 2;
-        const ctx = CORE.ctx;
-        ctx.moveTo(p, q);
-        ctx.lineTo(p + K, q);
-        ctx.lineTo(p + K, q + K);
-        ctx.lineTo(p, q + K);
-        ctx.closePath();
-        ctx.strokeStyle = "#000000";
-        ctx.lineWidth = 8;
-        ctx.stroke();
-
-        ctx.font = "90px deathspirit";
-        ctx.fillStyle = "#000000";
-        var textWidth = ctx.measureText("L").width;
-        ctx.fillText("L", p + (K - textWidth) / 2, q + K - 10);
-    }
-    {
-        const tile = new Block();
-        tile.x = CW / 2 + K / 2 + L + 150;
-        tile.y = V + K / 2 + D / 2;
-        tile.row = K;
-        tile.col = K;
-        tile.color = "#cccccc";
-        Blocks[3] = tile;
-        tile.draw();
-        p = CW / 2 + K / 2 + L + 150, q = V + K / 2 + D / 2;
-        const ctx = CORE.ctx;
-        ctx.moveTo(p, q);
-        ctx.lineTo(p + K, q);
-        ctx.lineTo(p + K, q + K);
-        ctx.lineTo(p, q + K);
-        ctx.closePath();
-        ctx.strokeStyle = "#000000";
-        ctx.lineWidth = 8;
-        ctx.stroke();
-
-        ctx.font = "90px deathspirit";
-        ctx.fillStyle = "#000000";
-        var textWidth = ctx.measureText("R").width;
-        ctx.fillText("R", p + (K - textWidth) / 2, q + K - 10);
-    }
 }).catch(function (e) {
     /// フォント読み込み失敗
     console.error('読み込み失敗...');
@@ -509,8 +518,8 @@ window.onload = function () {
             }
         }
         if (isEnd) {
-            tiles[oni_x][oni_y].color = "#999999";
-            tiles[oni_x][oni_y].draw();
+            /*tiles[oni_x][oni_y].color = "#999999";
+            tiles[oni_x][oni_y].draw();*/
             tiles[now_x][now_y].color = "#999999";
             tiles[now_x][now_y].draw();
             now_x = 4, now_y = 0;
@@ -532,8 +541,8 @@ window.onload = function () {
             }
             tiles[now_x][now_y].color = "#ffffff";
             tiles[now_x][now_y].draw();
-            tiles[oni_x][oni_y].color = ONI_COLOR;
-            tiles[oni_x][oni_y].draw();
+         /*   tiles[oni_x][oni_y].color = ONI_COLOR;
+            tiles[oni_x][oni_y].draw();*/
             eps = Math.random() / C - 1.0 / (2 * C);
             turn = 1;
             flag = 0;
