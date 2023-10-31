@@ -170,8 +170,8 @@ class CanvasOp {
         if (t_c == 0) {
             t_c = 1;
         }
-        p = (oni_x - now_x) / t_c * Math.cos(tmp + eps * 3.14) - (oni_y - now_y) / t_c * Math.sin(tmp + eps * 3.14);
-        q = (oni_x - now_x) / t_c * Math.sin(tmp + eps * 3.14) + (oni_y - now_y) / t_c * Math.cos(tmp + eps * 3.14);
+        p = (oni_x - now_x) / t_c * Math.cos(tmp + eps * 3.14 / 2) - (oni_y - now_y) / t_c * Math.sin(tmp + eps * 3.14 / 2);
+        q = (oni_x - now_x) / t_c * Math.sin(tmp + eps * 3.14 / 2) + (oni_y - now_y) / t_c * Math.cos(tmp + eps * 3.14 / 2);
         ctx.clearRect(60, 1080, 220, 220);
         ctx.beginPath();
         ctx.moveTo(170, 1190);
@@ -242,7 +242,7 @@ class CanvasOp {
             var textWidth = ctx.measureText("TAP : CONTINUE").width;
             ctx.fillText("TAP : CONTINUE", (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 - 360);
         }
-        if (performance.now() / 1000 - f_t >= 0.7 && !isEnd) {
+        if (performance.now() / 1000 - f_t >= 1 && !isEnd) {
             flag = 0, f_t = 1000000000;
             tiles[oni_x][oni_y].color = "#999999";
             tiles[oni_x][oni_y].draw();
