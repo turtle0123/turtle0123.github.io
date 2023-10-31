@@ -118,13 +118,13 @@ f_t = 1000000000;
 t_col = "#000000";
 const V = 1050, D = 40, L = 30, K = 105;
 const seq_p = [[4, 1], [4, 4]];
-const seq_q = [[1, 2]];
+const seq_q = [[2, 2]];
 const Blocks = [];
 t_c = 0;
 p = 0, q = 0;
 time = 0;
 tmp = 0;
-const C = 5;
+const C = 5, LL = 80;
 tx = 0, ty = 0;
 s = 0, t = 0;
 vc = [0, 0, 0];
@@ -139,12 +139,12 @@ s = 0;
 class CanvasOp {
     update(timestamp) {
         const ctx = CORE.ctx;
-        ctx.clearRect((CANVAS_WIDTH - 200) / 2, CANVAS_HEIGHT / 2 + 270, 200, 100);
-        ctx.font = "100px 'Impact'";
+        ctx.clearRect((CANVAS_WIDTH - 250) / 2, CANVAS_HEIGHT / 2 + 250, 250, 125);
+        ctx.font = "90px 'Impact'";
         ctx.fillStyle = t_col;
         ctx.clearRect(0, CANVAS_HEIGHT / 2 - 600, CANVAS_WIDTH, 120);
         var textWidth = ctx.measureText("Turn : " + turn.toString(10)).width;
-        ctx.fillText("Turn : " + turn.toString(10), (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 - 500);
+        ctx.fillText("Turn : " + turn.toString(10), (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 - 510);
         time = performance.now() / 400;
         time -= Math.floor(time / 4) * 4;
         if (time < 1) {
@@ -179,7 +179,7 @@ class CanvasOp {
         {
             s = 4, t = 0;
             tx = t * tileSize + t * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2;
-            ty = s * tileSize + s * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - 50;
+            ty = s * tileSize + s * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - LL;
             const ctx = CORE.ctx;
             ctx.font = "90px 'Impact'";
             ctx.fillStyle = "#000000";
@@ -189,7 +189,7 @@ class CanvasOp {
         {
             s = 4, t = 4;
             tx = t * tileSize + t * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2;
-            ty = s * tileSize + s * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - 50;
+            ty = s * tileSize + s * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - LL;
             const ctx = CORE.ctx;
             ctx.font = "90px 'Impact'";
             ctx.fillStyle = "#000000";
@@ -198,23 +198,23 @@ class CanvasOp {
         }
         isClear();
         isFail();
-        if (!flag) {
+        if (!flag && !isEnd) {
             const ctx = CORE.ctx;
-            ctx.font = "60px 'Impact'";
+            ctx.font = "50px 'Impact'";
             ctx.fillStyle = "#cc0000";
             var textWidth = ctx.measureText("YOUR TURN").width;
-            ctx.clearRect((CW - 300) / 2, 180, 300, 80);
-            ctx.fillText("YOUR TURN", (CW - textWidth) / 2, 250);
+            ctx.clearRect((CW - 300) / 2, 170, 300, 80);
+            ctx.fillText("YOUR TURN", (CW - textWidth) / 2, 240);
         }
-        else {
+        if(flag && !isEnd) {
             const ctx = CORE.ctx;
-            ctx.font = "60px 'Impact'";
+            ctx.font = "50px 'Impact'";
             ctx.fillStyle = "#0000cc";
             var textWidth = ctx.measureText("DEMON TURN").width;
-            ctx.clearRect((CW - 300) / 2, 180, 300, 80);
-            ctx.fillText("DEMON TURN", (CW - textWidth) / 2, 250);
+            ctx.clearRect((CW - 300) / 2, 170, 300, 80);
+            ctx.fillText("DEMON TURN", (CW - textWidth) / 2, 240);
         }
-        if (performance.now() / 1000 - f_t >= 1 && !isEnd) {
+        if (performance.now() / 1000 - f_t >= 0.2 && !isEnd) {
             flag = 0, f_t = 1000000000;
             tiles[oni_x][oni_y].color = "#999999";
             tiles[oni_x][oni_y].draw();
@@ -292,7 +292,7 @@ window.onload = function () {
         for (let j = 0; j < 5; j++) {
             const tile = new Tile();
             tile.x = j * tileSize + j * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2;
-            tile.y = i * tileSize + i * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - 50;
+            tile.y = i * tileSize + i * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - LL;
             tile.row = i;
             tile.col = j;
             if (i == 4 && j == 0) {
@@ -310,7 +310,7 @@ window.onload = function () {
         for (let j = 0; j < 6; j++) {
             const tile = new Block();
             tile.x = j * tileSize + j * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2 - margin;
-            tile.y = i * tileSize + i * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - 50 - margin;
+            tile.y = i * tileSize + i * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - LL - margin;
             tile.row = margin;
             tile.col = margin;
             tile.color = "#000000";
@@ -321,7 +321,7 @@ window.onload = function () {
         for (j = 0; j < 6; ++j) {
             const tile = new Block();
             tile.x = j * tileSize + (j - 1) * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2;
-            tile.y = i * tileSize + i * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - 50;
+            tile.y = i * tileSize + i * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - LL;
             tile.row = margin;
             tile.col = tileSize;
             tile.color = "#000000";
@@ -332,7 +332,7 @@ window.onload = function () {
         i = seq_p[t][0], j = seq_p[t][1];
         const tile = new Block();
         tile.x = j * tileSize + (j - 1) * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2;
-        tile.y = i * tileSize + i * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - 50;
+        tile.y = i * tileSize + i * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - LL;
         tile.row = margin;
         tile.col = tileSize;
         tile.color = "#00cc00";
@@ -342,7 +342,7 @@ window.onload = function () {
         for (j = 0; j < 5; ++j) {
             const tile = new Block();
             tile.x = j * tileSize + j * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2;
-            tile.y = i * tileSize + (i - 1) * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - 50;
+            tile.y = i * tileSize + (i - 1) * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - LL;
             tile.row = tileSize;
             tile.col = margin;
             tile.color = "#000000";
@@ -353,7 +353,7 @@ window.onload = function () {
         i = seq_q[t][0], j = seq_q[t][1];
         const tile = new Block();
         tile.x = j * tileSize + j * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2;
-        tile.y = i * tileSize + (i - 1) * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - 50;
+        tile.y = i * tileSize + (i - 1) * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - LL;
         tile.row = tileSize;
         tile.col = margin;
         tile.color = "#00cc00";
@@ -511,20 +511,33 @@ function isClear() {
     if (now_x == 4 && now_y == 4) {
         isEnd = 1;
         const ctx = CORE.ctx;
-        ctx.font = "80px 'Impact'";
+        ctx.clearRect((CW - 300) / 2, 170, 300, 80);
+        ctx.font = "70px 'Impact'";
         ctx.fillStyle = "#cc0000";
         var textWidth = ctx.measureText("CLEAR").width;
-        ctx.fillText("CLEAR", (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 + 350);
+        ctx.fillText("CLEAR", (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 + 320);
+
+        ctx.font = "35px 'Impact'";
+        ctx.fillStyle = "#cccccc";
+        var textWidth = ctx.measureText("TAP : CONTINUE").width;
+        ctx.fillText("TAP : CONTINUE", (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 + 365);
     }
 }
 function isFail() {
     if (now_x == oni_x && now_y == oni_y) {
         isEnd = 1;
         const ctx = CORE.ctx;
-        ctx.font = "80px Impact";
+        ctx.clearRect((CW - 300) / 2, 170, 300, 80);
+        ctx.font = "70px Impact";
         ctx.fillStyle = "#0000cc";
         var textWidth = ctx.measureText("FAIL").width;
-        ctx.fillText("FAIL", (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 + 350);
+        ctx.fillText("FAIL", (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 + 320);
+
+
+        ctx.font = "35px 'Impact'";
+        ctx.fillStyle = "#cccccc";
+        var textWidth = ctx.measureText("TAP : CONTINUE").width;
+        ctx.fillText("TAP : CONTINUE", (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 + 365);
     }
 }
 function checkTiles0(e) {
