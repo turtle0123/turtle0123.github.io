@@ -116,7 +116,7 @@ turn = 1;
 flag = 0;
 f_t = 1000000000;
 t_col = "#000000";
-const V = 1050, D = 40, L = 30, K = 105;
+const V = 1030, D = 40, L = 30, K = 105;
 const seq_p = [[4, 1], [4, 4]];
 const seq_q = [[2, 2]];
 const Blocks = [];
@@ -124,7 +124,7 @@ t_c = 0;
 p = 0, q = 0;
 time = 0;
 tmp = 0;
-const C = 5, LL = 80;
+const C = 5, LL = 0;
 tx = 0, ty = 0;
 s = 0, t = 0;
 vc = [0, 0, 0];
@@ -136,11 +136,18 @@ f_tmp = 0;
 eps = 0.0;
 isEnd = 0;
 s = 0;
+
+/// FontFaceオブジェクト生成
+var fontFace = new FontFace(
+    'deathspirit',
+    'url(./Death_Spirit.ttf)',
+    { style: 'normal', weight: 700 }
+);
+
 class CanvasOp {
     update(timestamp) {
         const ctx = CORE.ctx;
-        ctx.clearRect((CANVAS_WIDTH - 250) / 2, CANVAS_HEIGHT / 2 + 250, 250, 125);
-        ctx.font = "90px 'Impact'";
+        ctx.font = "90px deathspirit";
         ctx.fillStyle = t_col;
         ctx.clearRect(0, CANVAS_HEIGHT / 2 - 600, CANVAS_WIDTH, 120);
         var textWidth = ctx.measureText("Turn : " + turn.toString(10)).width;
@@ -165,56 +172,77 @@ class CanvasOp {
         }
         p = (oni_x - now_x) / t_c * Math.cos(tmp + eps * 3.14) - (oni_y - now_y) / t_c * Math.sin(tmp + eps * 3.14);
         q = (oni_x - now_x) / t_c * Math.sin(tmp + eps * 3.14) + (oni_y - now_y) / t_c * Math.cos(tmp + eps * 3.14);
-        ctx.clearRect(60, 1020, 220, 220);
+        ctx.clearRect(60, 1080, 220, 220);
         ctx.beginPath();
-        ctx.moveTo(170, 1130);
-        ctx.lineTo(170 + q * 100, 1130 + p * 100);
+        ctx.moveTo(170, 1190);
+        ctx.lineTo(170 + q * 70, 1190 + p * 70);
         ctx.closePath();
         ctx.strokeStyle = "#000000";
         ctx.lineWidth = 8;
         ctx.stroke();
-        ctx.arc(170, 1130, 10, 0 * Math.PI / 180, 360 * Math.PI / 180, false);
+        ctx.arc(170, 1190, 10, 0 * Math.PI / 180, 360 * Math.PI / 180, false);
         ctx.fillStyle = "#000000";
         ctx.fill();
-        {
-            s = 4, t = 0;
-            tx = t * tileSize + t * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2;
-            ty = s * tileSize + s * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - LL;
-            const ctx = CORE.ctx;
-            ctx.font = "90px 'Impact'";
-            ctx.fillStyle = "#000000";
-            var textWidth = ctx.measureText("S").width;
-            ctx.fillText("S", tx + (tileSize - textWidth) / 2, ty + tileSize - 10);
+        if (performance.now() / 1000 > 0.5) {
+                s = 4, t = 0;
+                tx = t * tileSize + t * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2;
+                ty = s * tileSize + s * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - LL;
+                const ctx = CORE.ctx;
+                ctx.font = "90px deathspirit";
+                ctx.fillStyle = "#000000";
+                var textWidth = ctx.measureText("S").width;
+                ctx.fillText("S", tx + (tileSize - textWidth) / 2, ty + tileSize - 10);
         }
-        {
+        if (performance.now() / 1000 > 0.5) {
             s = 4, t = 4;
             tx = t * tileSize + t * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2;
             ty = s * tileSize + s * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - LL;
             const ctx = CORE.ctx;
-            ctx.font = "90px 'Impact'";
+            ctx.font = "90px deathspirit";
             ctx.fillStyle = "#000000";
             var textWidth = ctx.measureText("G").width;
             ctx.fillText("G", tx + (tileSize - textWidth) / 2, ty + tileSize - 10);
         }
         isClear();
         isFail();
+        ctx.clearRect((CW - 600) / 2, 170, 600, 170);
         if (!flag && !isEnd) {
             const ctx = CORE.ctx;
-            ctx.font = "50px 'Impact'";
+            ctx.font = "60px deathspirit";
             ctx.fillStyle = "#cc0000";
             var textWidth = ctx.measureText("YOUR TURN").width;
-            ctx.clearRect((CW - 300) / 2, 170, 300, 80);
-            ctx.fillText("YOUR TURN", (CW - textWidth) / 2, 240);
+            ctx.fillText("YOUR TURN", (CW - textWidth) / 2, 270);
         }
         if(flag && !isEnd) {
             const ctx = CORE.ctx;
-            ctx.font = "50px 'Impact'";
+            ctx.font = "60px deathspirit";
             ctx.fillStyle = "#0000cc";
-            var textWidth = ctx.measureText("DEMON TURN").width;
-            ctx.clearRect((CW - 300) / 2, 170, 300, 80);
-            ctx.fillText("DEMON TURN", (CW - textWidth) / 2, 240);
+            var textWidth = ctx.measureText("DEMON'S TURN").width;
+            ctx.fillText("DEMON'S TURN", (CW - textWidth) / 2, 270);
         }
-        if (performance.now() / 1000 - f_t >= 0.2 && !isEnd) {
+        if (isEnd && now_x == 4 && now_y == 4) {
+            ctx.font = "70px deathspirit";
+            ctx.fillStyle = "#cc0000";
+            var textWidth = ctx.measureText("CLEAR").width;
+            ctx.fillText("CLEAR", (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 - 400);
+
+            ctx.font = "40px deathspirit";
+            ctx.fillStyle = "#cccccc";
+            var textWidth = ctx.measureText("TAP : CONTINUE").width;
+            ctx.fillText("TAP : CONTINUE", (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 - 360);
+        }
+        if (isEnd && now_x == oni_x && now_y == oni_y) {
+            ctx.font = "70px deathspirit";
+            ctx.fillStyle = "#0000cc";
+            var textWidth = ctx.measureText("FAIL").width;
+            ctx.fillText("FAIL", (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 - 400);
+
+            ctx.font = "40px deathspirit";
+            ctx.fillStyle = "#cccccc";
+            var textWidth = ctx.measureText("TAP : CONTINUE").width;
+            ctx.fillText("TAP : CONTINUE", (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 - 360);
+        }
+        if (performance.now() / 1000 - f_t >= 0.7 && !isEnd) {
             flag = 0, f_t = 1000000000;
             tiles[oni_x][oni_y].color = "#999999";
             tiles[oni_x][oni_y].draw();
@@ -262,6 +290,120 @@ class CanvasOp {
 }
 
 const ONI_COLOR = "#999999";
+
+fontFace.load().then(function (loadedFace) {
+    document.fonts.add(loadedFace);
+    document.body.style.fontFamily = '"deathspirit"';
+    const ctx = CORE.ctx;
+    ctx.font = "60px deathspirit";
+    ctx.fillStyle = "#000000";
+    ctx.fillText("SENSOR", 80, 1070);
+    {
+        const tile = new Block();
+        tile.x = CW / 2 - K / 2 + 150;
+        tile.y = V;
+        tile.row = K;
+        tile.col = K;
+        tile.color = "#cccccc";
+        Blocks[0] = tile;
+        tile.draw();
+        const ctx = CORE.ctx;
+        ctx.beginPath();
+        p = CW / 2 - K / 2 + 150, q = V;
+        ctx.moveTo(p, q);
+        ctx.lineTo(p + K, q);
+        ctx.lineTo(p + K, q + K);
+        ctx.lineTo(p, q + K);
+        ctx.closePath();
+        ctx.strokeStyle = "#000000";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+
+        ctx.font = "90px deathspirit";
+        ctx.fillStyle = "#000000";
+        var textWidth = ctx.measureText("U").width;
+        ctx.fillText("U", p + (K - textWidth) / 2, q + K - 10);
+    }
+    {
+        const tile = new Block();
+        tile.x = CW / 2 - K / 2 + 150;
+        tile.y = V + K + D;
+        tile.row = K;
+        tile.col = K;
+        tile.color = "#cccccc";
+        Blocks[1] = tile;
+        tile.draw();
+        p = CW / 2 - K / 2 + 150, q = V + K + D;
+        const ctx = CORE.ctx;
+        ctx.moveTo(p, q);
+        ctx.lineTo(p + K, q);
+        ctx.lineTo(p + K, q + K);
+        ctx.lineTo(p, q + K);
+        ctx.closePath();
+        ctx.strokeStyle = "#000000";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+
+        ctx.font = "90px deathspirit";
+        ctx.fillStyle = "#000000";
+        var textWidth = ctx.measureText("D").width;
+        ctx.fillText("D", p + (K - textWidth) / 2, q + K - 10);
+    }
+    {
+        const tile = new Block();
+        tile.x = CW / 2 - K / 2 - L - K + 150;
+        tile.y = V + K / 2 + D / 2;
+        tile.row = K;
+        tile.col = K;
+        tile.color = "#cccccc";
+        Blocks[2] = tile;
+        tile.draw();
+        p = CW / 2 - K / 2 - L - K + 150, q = V + K / 2 + D / 2;
+        const ctx = CORE.ctx;
+        ctx.moveTo(p, q);
+        ctx.lineTo(p + K, q);
+        ctx.lineTo(p + K, q + K);
+        ctx.lineTo(p, q + K);
+        ctx.closePath();
+        ctx.strokeStyle = "#000000";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+
+        ctx.font = "90px deathspirit";
+        ctx.fillStyle = "#000000";
+        var textWidth = ctx.measureText("L").width;
+        ctx.fillText("L", p + (K - textWidth) / 2, q + K - 10);
+    }
+    {
+        const tile = new Block();
+        tile.x = CW / 2 + K / 2 + L + 150;
+        tile.y = V + K / 2 + D / 2;
+        tile.row = K;
+        tile.col = K;
+        tile.color = "#cccccc";
+        Blocks[3] = tile;
+        tile.draw();
+        p = CW / 2 + K / 2 + L + 150, q = V + K / 2 + D / 2;
+        const ctx = CORE.ctx;
+        ctx.moveTo(p, q);
+        ctx.lineTo(p + K, q);
+        ctx.lineTo(p + K, q + K);
+        ctx.lineTo(p, q + K);
+        ctx.closePath();
+        ctx.strokeStyle = "#000000";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+
+        ctx.font = "90px deathspirit";
+        ctx.fillStyle = "#000000";
+        var textWidth = ctx.measureText("R").width;
+        ctx.fillText("R", p + (K - textWidth) / 2, q + K - 10);
+    }
+}).catch(function (e) {
+    /// フォント読み込み失敗
+    console.error('読み込み失敗...');
+});
+
 window.onload = function () {
     CORE.setup(CANVAS_WIDTH, CANVAS_HEIGHT);
     s = getRandomInt(5);
@@ -279,13 +421,6 @@ window.onload = function () {
     }
     if (s == 4) {
         oni_x = 0, oni_y = 3;
-    }
-    {
-        ctx = CORE.ctx;
-        ctx.font = "60px 'Impact'";
-        ctx.fillStyle = "#000000";
-        var textWidth = ctx.measureText("SENSOR").width;
-        ctx.fillText("SENSOR", 80, 1300);
     }
     for (let i = 0; i < 5; i++) {
         tiles[i] = [];
@@ -359,107 +494,7 @@ window.onload = function () {
         tile.color = "#00cc00";
         tile.draw();
     }
-    {
-        const tile = new Block();
-        tile.x = CW / 2 - K / 2 + 150;
-        tile.y = V;
-        tile.row = K;
-        tile.col = K;
-        tile.color = "#cccccc";
-        Blocks[0] = tile;
-        tile.draw();
-        const ctx = CORE.ctx;
-        ctx.beginPath();
-        p = CW / 2 - K / 2 + 150, q = V;
-        ctx.moveTo(p, q);
-        ctx.lineTo(p + K, q);
-        ctx.lineTo(p + K, q + K);
-        ctx.lineTo(p, q + K);
-        ctx.closePath();
-        ctx.strokeStyle = "#000000";
-        ctx.lineWidth = 8;
-        ctx.stroke();
-
-        ctx.font = "90px 'Impact'";
-        ctx.fillStyle = "#000000";
-        var textWidth = ctx.measureText("U").width;
-        ctx.fillText("U", p + (K - textWidth) / 2, q + K - 10);
-    }
-    {
-        const tile = new Block();
-        tile.x = CW / 2 - K / 2 + 150;
-        tile.y = V + K + D;
-        tile.row = K;
-        tile.col = K;
-        tile.color = "#cccccc";
-        Blocks[1] = tile;
-        tile.draw();
-        p = CW / 2 - K / 2 + 150, q = V + K + D;
-        const ctx = CORE.ctx;
-        ctx.moveTo(p, q);
-        ctx.lineTo(p + K, q);
-        ctx.lineTo(p + K, q + K);
-        ctx.lineTo(p, q + K);
-        ctx.closePath();
-        ctx.strokeStyle = "#000000";
-        ctx.lineWidth = 8;
-        ctx.stroke();
-
-        ctx.font = "90px 'Impact'";
-        ctx.fillStyle = "#000000";
-        var textWidth = ctx.measureText("D").width;
-        ctx.fillText("D", p + (K - textWidth) / 2, q + K - 10);
-    }
-    {
-        const tile = new Block();
-        tile.x = CW / 2 - K / 2 - L - K + 150;
-        tile.y = V + K / 2 + D / 2;
-        tile.row = K;
-        tile.col = K;
-        tile.color = "#cccccc";
-        Blocks[2] = tile;
-        tile.draw();
-        p = CW / 2 - K / 2 - L - K + 150, q = V + K / 2 + D / 2;
-        const ctx = CORE.ctx;
-        ctx.moveTo(p, q);
-        ctx.lineTo(p + K, q);
-        ctx.lineTo(p + K, q + K);
-        ctx.lineTo(p, q + K);
-        ctx.closePath();
-        ctx.strokeStyle = "#000000";
-        ctx.lineWidth = 8;
-        ctx.stroke();
-
-        ctx.font = "90px 'Impact'";
-        ctx.fillStyle = "#000000";
-        var textWidth = ctx.measureText("L").width;
-        ctx.fillText("L", p + (K - textWidth) / 2, q + K - 10);
-    }
-    {
-        const tile = new Block();
-        tile.x = CW / 2 + K / 2 + L + 150;
-        tile.y = V + K / 2 + D / 2;
-        tile.row = K;
-        tile.col = K;
-        tile.color = "#cccccc";
-        Blocks[3] = tile;
-        tile.draw();
-        p = CW / 2 + K / 2 + L + 150, q = V + K / 2 + D / 2;
-        const ctx = CORE.ctx;
-        ctx.moveTo(p, q);
-        ctx.lineTo(p + K, q);
-        ctx.lineTo(p + K, q + K);
-        ctx.lineTo(p, q + K);
-        ctx.closePath();
-        ctx.strokeStyle = "#000000";
-        ctx.lineWidth = 8;
-        ctx.stroke();
-
-        ctx.font = "90px 'Impact'";
-        ctx.fillStyle = "#000000";
-        var textWidth = ctx.measureText("R").width;
-        ctx.fillText("R", p + (K - textWidth) / 2, q + K - 10);
-    }
+    
     canvas = new CanvasOp();
     canvas.update(0);
     CORE.canvas.addEventListener("pointerdown", (e) => {
@@ -510,34 +545,11 @@ window.onload = function () {
 function isClear() {
     if (now_x == 4 && now_y == 4) {
         isEnd = 1;
-        const ctx = CORE.ctx;
-        ctx.clearRect((CW - 300) / 2, 170, 300, 80);
-        ctx.font = "70px 'Impact'";
-        ctx.fillStyle = "#cc0000";
-        var textWidth = ctx.measureText("CLEAR").width;
-        ctx.fillText("CLEAR", (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 + 320);
-
-        ctx.font = "35px 'Impact'";
-        ctx.fillStyle = "#cccccc";
-        var textWidth = ctx.measureText("TAP : CONTINUE").width;
-        ctx.fillText("TAP : CONTINUE", (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 + 365);
     }
 }
 function isFail() {
     if (now_x == oni_x && now_y == oni_y) {
         isEnd = 1;
-        const ctx = CORE.ctx;
-        ctx.clearRect((CW - 300) / 2, 170, 300, 80);
-        ctx.font = "70px Impact";
-        ctx.fillStyle = "#0000cc";
-        var textWidth = ctx.measureText("FAIL").width;
-        ctx.fillText("FAIL", (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 + 320);
-
-
-        ctx.font = "35px 'Impact'";
-        ctx.fillStyle = "#cccccc";
-        var textWidth = ctx.measureText("TAP : CONTINUE").width;
-        ctx.fillText("TAP : CONTINUE", (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 + 365);
     }
 }
 function checkTiles0(e) {
