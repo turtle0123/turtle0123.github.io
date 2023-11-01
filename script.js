@@ -405,7 +405,7 @@ class CanvasOp {
                 ctx.fillText("CLEAR", (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 - 400);
 
                 ctx.font = "40px deathspirit";
-                ctx.fillStyle = "#cccccc";
+                ctx.fillStyle = "#000000";
                 var textWidth = ctx.measureText("TAP : CONTINUE").width;
                 ctx.fillText("TAP : CONTINUE", (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 - 340);
             }
@@ -416,7 +416,7 @@ class CanvasOp {
                 ctx.fillText("FAIL", (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 - 400);
 
                 ctx.font = "40px deathspirit";
-                ctx.fillStyle = "#cccccc";
+                ctx.fillStyle = "#000000";
                 var textWidth = ctx.measureText("TAP : CONTINUE").width;
                 ctx.fillText("TAP : CONTINUE", (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 - 340);
             }
