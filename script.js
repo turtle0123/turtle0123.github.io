@@ -107,7 +107,7 @@ const margin = 7;
 const tiles = [];
 const Len = 5;
 now_x = 4, now_y = 0;
-oni_x = 4, oni_y = 3;
+oni_x = 1, oni_y = 1;
 turn = 1;
 flag = 0;
 f_t = 1000000000;
@@ -142,6 +142,11 @@ var fontFace = new FontFace(
 class CanvasOp {
     update(timestamp) {
         const ctx = CORE.ctx;
+        for (i = 0; i < 5; ++i) {
+            for (j = 0; j < 5; ++j) {
+                ctx.clearRect(tiles[i][j].x + 3, tiles[i][j].y + 3, tileSize - 6, tileSize - 6);
+            }
+        }
         ctx.font = "60px deathspirit";
         ctx.fillStyle = "#000000";
         ctx.clearRect(80, 1010, 250, 70);
@@ -285,16 +290,6 @@ class CanvasOp {
         ctx.arc(170, 1190, 10, 0 * Math.PI / 180, 360 * Math.PI / 180, false);
         ctx.fillStyle = "#333333";
         ctx.fill();
-        {
-            s = 4, t = 0;
-            tx = t * tileSize + t * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2;
-            ty = s * tileSize + s * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - LL;
-            ctx.clearRect(tx + 3, ty + 3, tileSize - 6, tileSize - 6);
-            t = 4;
-            tx = t * tileSize + t * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2;
-            ty = s * tileSize + s * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - LL;
-            ctx.clearRect(tx + 3, ty + 3, tileSize - 6, tileSize - 6);
-        }
         ctx.beginPath();
         ctx.arc((tiles[now_x][now_y].x + tileSize / 2), (tiles[now_x][now_y].y + tileSize / 2), tileSize / 2 - 5, 0 * Math.PI / 180, 360 * Math.PI / 180, false);
         ctx.fillStyle = "#cccc00";
@@ -357,7 +352,7 @@ class CanvasOp {
             var textWidth = ctx.measureText("TAP : CONTINUE").width;
             ctx.fillText("TAP : CONTINUE", (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 - 340);
         }
-        if (performance.now() / 1000 - f_t >= 1 && !isEnd) {
+        if (performance.now() / 1000 - f_t >= 0.5 && !isEnd) {
             flag = 0, f_t = 1000000000;
             mn = 20.0;
             for (i = 0; i < 4; ++i) {
@@ -394,7 +389,7 @@ class CanvasOp {
                 }
             }
             oni_x += dx[vc[0]][0], oni_y += dx[vc[0]][1];
-            eps = Math.random() / C - 1.0 / (2 * C);
+            eps = Math.random() / (2 * C) - 1.0 / (4 * C);
         }
         window.requestAnimationFrame((timestamp) => this.update(timestamp));
     }
@@ -407,10 +402,9 @@ fontFace.load().then(function (loadedFace) {
     /// フォント読み込み失敗
     console.error('読み込み失敗...');
 });
-
 window.onload = function () {
     CORE.setup(CANVAS_WIDTH, CANVAS_HEIGHT);
-    s = getRandomInt(5);
+    s = getRandomInt(3);
     if (s == 0) {
         oni_x = 3, oni_y = 4;
     }
@@ -419,12 +413,6 @@ window.onload = function () {
     }
     if (s == 2) {
         oni_x = 2, oni_y = 3;
-    }
-    if (s == 3) {
-        oni_x = 1, oni_y = 4;
-    }
-    if (s == 4) {
-        oni_x = 0, oni_y = 3;
     }
     const ctx = CORE.ctx;
     for (let i = 0; i < 5; i++) {
@@ -500,7 +488,6 @@ window.onload = function () {
         tile.color = "#333333";
         tile.draw();
     }
-    
     canvas = new CanvasOp();
     canvas.update(0);
     CORE.canvas.addEventListener("pointerdown", (e) => {
@@ -516,9 +503,8 @@ window.onload = function () {
         }
         if (isEnd) {
             const ctx = CORE.ctx;
-            ctx.clearRect(tiles[now_x][now_y].x + 3, tiles[now_x][now_y].y+ 3, tileSize - 6, tileSize - 6);
             now_x = 4, now_y = 0;
-            s = getRandomInt(5);
+            s = getRandomInt(3);
             if (s == 0) {
                 oni_x = 3, oni_y = 4;
             }
@@ -528,13 +514,7 @@ window.onload = function () {
             if (s == 2) {
                 oni_x = 2, oni_y = 3;
             }
-            if (s == 3) {
-                oni_x = 1, oni_y = 4;
-            }
-            if (s == 4) {
-                oni_x = 0, oni_y = 3;
-            }
-            eps = Math.random() / C - 1.0 / (2 * C);
+            eps = Math.random() / (2 * C) - 1.0 / (4 * C);
             turn = 1;
             flag = 0;
             f_t = 1000000000;
@@ -564,13 +544,9 @@ function checkTiles0(e) {
                 return false;
             }
         }
-        eps = Math.random() / C - 1.0 / (2 * C);
+        eps = Math.random() / (2 * C) - 1.0 / (4 * C);
         turn += 1;
         now_x -= 1;
-        const row = tile.row;
-        const col = tile.col;
-        const ctx = CORE.ctx;
-        ctx.clearRect(tiles[i][j].x + 3, tiles[i][j].y + 3, tileSize - 6, tileSize - 6);
         return true;
     }
     return false;
@@ -588,13 +564,9 @@ function checkTiles1(e) {
                 return false;
             }
         }
-        eps = Math.random() / C - 1.0 / (2 * C);
+        eps = Math.random() / (2 * C) - 1.0 / (4 * C);
         turn += 1;
         now_x += 1;
-        const row = tile.row;
-        const col = tile.col;
-        const ctx = CORE.ctx;
-        ctx.clearRect(tiles[i][j].x + 3, tiles[i][j].y + 3, tileSize - 6, tileSize - 6);
         return true;
     }
     return false;
@@ -612,13 +584,9 @@ function checkTiles2(e) {
                 return false;
             }
         }
-        eps = Math.random() / C - 1.0 / (2 * C);
+        eps = Math.random() / (2 * C) - 1.0 / (4 * C);
         turn += 1;
         now_y -= 1;
-        const row = tile.row;
-        const col = tile.col;
-        const ctx = CORE.ctx;
-        ctx.clearRect(tiles[i][j].x + 3, tiles[i][j].y + 3, tileSize - 6, tileSize - 6);
         return true;
     }
     return false;
@@ -636,13 +604,9 @@ function checkTiles3(e) {
                 return false;
             }
         }
-        eps = Math.random() / C - 1.0 / (2 * C);
+        eps = Math.random() / (2 * C) - 1.0 / (4 * C);
         turn += 1;
         now_y += 1;
-        const row = tile.row;
-        const col = tile.col;
-        const ctx = CORE.ctx;
-        ctx.clearRect(tiles[i][j].x + 3, tiles[i][j].y + 3, tileSize - 6, tileSize - 6);
         return true;
     }
     return false;
