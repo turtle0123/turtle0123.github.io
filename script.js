@@ -82,10 +82,6 @@ class Tile {
         this.y = 0;
         this.row = 0;
         this.col = 0;
-        this.color = RED;
-    }
-    draw() {
-        rectFill(this.x, this.y, tileSize, tileSize, this.color);
     }
 }
 
@@ -95,7 +91,7 @@ class Block {
         this.y = 0;
         this.row = 0;
         this.col = 0;
-        this.color = RED;
+        this.color = "#000000";
     }
     draw() {
         rectFill(this.x, this.y, this.row, this.col, this.color);
@@ -106,8 +102,8 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
 
-const tileSize = 110;
-const margin = 10;
+const tileSize = 115;
+const margin = 7;
 const tiles = [];
 const Len = 5;
 now_x = 4, now_y = 0;
@@ -115,7 +111,6 @@ oni_x = 4, oni_y = 3;
 turn = 1;
 flag = 0;
 f_t = 1000000000;
-t_col = "#000000";
 const V = 1030, D = 40, L = 30, K = 105;
 const seq_p = [[4, 1], [4, 4]];
 const seq_q = [[2, 2]];
@@ -158,7 +153,7 @@ class CanvasOp {
             tile.row = K;
             tile.col = K;
             ctx.clearRect(tile.x, tile.y, tile.row, tile.col);
-            tile.color = "#cccccc";
+            tile.color = "#aaaaaa";
             Blocks[0] = tile;
             tile.draw();
             ctx.beginPath();
@@ -168,8 +163,8 @@ class CanvasOp {
             ctx.lineTo(p + K, q + K);
             ctx.lineTo(p, q + K);
             ctx.closePath();
-            ctx.strokeStyle = "#000000";
-            ctx.lineWidth = 8;
+            ctx.strokeStyle = "#222222";
+            ctx.lineWidth = 5;
             ctx.stroke();
 
             ctx.font = "90px deathspirit";
@@ -184,7 +179,7 @@ class CanvasOp {
             tile.row = K;
             tile.col = K;
             ctx.clearRect(tile.x, tile.y, tile.row, tile.col);
-            tile.color = "#cccccc";
+            tile.color = "#aaaaaa";
             Blocks[1] = tile;
             tile.draw();
             p = CW / 2 - K / 2 + 150, q = V + K + D
@@ -193,8 +188,8 @@ class CanvasOp {
             ctx.lineTo(p + K, q + K);
             ctx.lineTo(p, q + K);
             ctx.closePath();
-            ctx.strokeStyle = "#000000";
-            ctx.lineWidth = 8;
+            ctx.strokeStyle = "#333333";
+            ctx.lineWidth = 5;
             ctx.stroke();
 
             ctx.font = "90px deathspirit";
@@ -209,7 +204,7 @@ class CanvasOp {
             tile.row = K;
             tile.col = K;
             ctx.clearRect(tile.x, tile.y, tile.row, tile.col);
-            tile.color = "#cccccc";
+            tile.color = "#aaaaaa";
             Blocks[2] = tile;
             tile.draw();
             p = CW / 2 - K / 2 - L - K + 150, q = V + K / 2 + D / 2;
@@ -218,8 +213,8 @@ class CanvasOp {
             ctx.lineTo(p + K, q + K);
             ctx.lineTo(p, q + K);
             ctx.closePath();
-            ctx.strokeStyle = "#000000";
-            ctx.lineWidth = 8;
+            ctx.strokeStyle = "#333333";
+            ctx.lineWidth = 5;
             ctx.stroke();
 
             ctx.font = "90px deathspirit";
@@ -234,7 +229,7 @@ class CanvasOp {
             tile.row = K;
             tile.col = K;
             ctx.clearRect(tile.x, tile.y, tile.row, tile.col);
-            tile.color = "#cccccc";
+            tile.color = "#aaaaaa";
             Blocks[3] = tile;
             tile.draw();
             p = CW / 2 + K / 2 + L + 150, q = V + K / 2 + D / 2;
@@ -243,8 +238,8 @@ class CanvasOp {
             ctx.lineTo(p + K, q + K);
             ctx.lineTo(p, q + K);
             ctx.closePath();
-            ctx.strokeStyle = "#000000";
-            ctx.lineWidth = 8;
+            ctx.strokeStyle = "#222222";
+            ctx.lineWidth = 5;
             ctx.stroke();
 
             ctx.font = "90px deathspirit";
@@ -253,7 +248,7 @@ class CanvasOp {
             ctx.fillText("R", p + (K - textWidth) / 2, q + K - 10);
         }
         ctx.font = "90px deathspirit";
-        ctx.fillStyle = t_col;
+        ctx.fillStyle = "#000000";
         ctx.clearRect(0, CANVAS_HEIGHT / 2 - 600, CANVAS_WIDTH, 120);
         var textWidth = ctx.measureText("Turn : " + turn.toString(10)).width;
         ctx.fillText("Turn : " + turn.toString(10), (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 - 510);
@@ -282,23 +277,28 @@ class CanvasOp {
         ctx.moveTo(170, 1190);
         ctx.lineTo(170 + q * 70, 1190 + p * 70);
         ctx.closePath();
-        ctx.strokeStyle = "#000000";
+        ctx.strokeStyle = "#333333";
         ctx.lineWidth = 8;
         ctx.stroke();
+        ctx.fill();
+        ctx.beginPath();
         ctx.arc(170, 1190, 10, 0 * Math.PI / 180, 360 * Math.PI / 180, false);
-        ctx.fillStyle = "#000000";
+        ctx.fillStyle = "#333333";
         ctx.fill();
         {
             s = 4, t = 0;
             tx = t * tileSize + t * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2;
             ty = s * tileSize + s * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - LL;
-            ctx.clearRect(tx, ty, tileSize, tileSize);
+            ctx.clearRect(tx + 3, ty + 3, tileSize - 6, tileSize - 6);
             t = 4;
             tx = t * tileSize + t * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2;
             ty = s * tileSize + s * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - LL;
-            ctx.clearRect(tx, ty, tileSize, tileSize);
+            ctx.clearRect(tx + 3, ty + 3, tileSize - 6, tileSize - 6);
         }
-        tiles[now_x][now_y].draw();
+        ctx.beginPath();
+        ctx.arc((tiles[now_x][now_y].x + tileSize / 2), (tiles[now_x][now_y].y + tileSize / 2), tileSize / 2 - 5, 0 * Math.PI / 180, 360 * Math.PI / 180, false);
+        ctx.fillStyle = "#cccc00";
+        ctx.fill();
         {
             s = 4, t = 0;
             tx = t * tileSize + t * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2;
@@ -306,7 +306,7 @@ class CanvasOp {
             ctx.font = "90px deathspirit";
             ctx.fillStyle = "#000000";
             var textWidth = ctx.measureText("S").width;
-            ctx.fillText("S", tx + (tileSize - textWidth) / 2, ty + tileSize - 10);
+            ctx.fillText("S", tx + (tileSize - textWidth) / 2, ty + 90);
         }
         {
             s = 4, t = 4;
@@ -315,28 +315,29 @@ class CanvasOp {
             ctx.font = "90px deathspirit";
             ctx.fillStyle = "#000000";
             var textWidth = ctx.measureText("G").width;
-            ctx.fillText("G", tx + (tileSize - textWidth) / 2, ty + tileSize - 10);
+            ctx.fillText("G", tx + (tileSize - textWidth) / 2, ty + 90);
         }
+
         isClear();
         isFail();
         ctx.clearRect((CW - 600) / 2, 170, 600, 170);
         if (!flag && !isEnd) {
             const ctx = CORE.ctx;
             ctx.font = "60px deathspirit";
-            ctx.fillStyle = "#cc0000";
+            ctx.fillStyle = "#cc2222";
             var textWidth = ctx.measureText("YOUR TURN").width;
             ctx.fillText("YOUR TURN", (CW - textWidth) / 2, 270);
         }
         if(flag && !isEnd) {
             const ctx = CORE.ctx;
             ctx.font = "60px deathspirit";
-            ctx.fillStyle = "#0000cc";
+            ctx.fillStyle = "#2222cc";
             var textWidth = ctx.measureText("DEMON'S TURN").width;
             ctx.fillText("DEMON'S TURN", (CW - textWidth) / 2, 270);
         }
         if (isEnd && now_x == 4 && now_y == 4) {
             ctx.font = "70px deathspirit";
-            ctx.fillStyle = "#cc0000";
+            ctx.fillStyle = "#cc2222";
             var textWidth = ctx.measureText("CLEAR").width;
             ctx.fillText("CLEAR", (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 - 400);
 
@@ -347,7 +348,7 @@ class CanvasOp {
         }
         if (isEnd && now_x == oni_x && now_y == oni_y) {
             ctx.font = "70px deathspirit";
-            ctx.fillStyle = "#0000cc";
+            ctx.fillStyle = "#2222cc";
             var textWidth = ctx.measureText("FAIL").width;
             ctx.fillText("FAIL", (CANVAS_WIDTH - textWidth) / 2, CANVAS_HEIGHT / 2 - 400);
 
@@ -358,8 +359,6 @@ class CanvasOp {
         }
         if (performance.now() / 1000 - f_t >= 1 && !isEnd) {
             flag = 0, f_t = 1000000000;
-         /*   tiles[oni_x][oni_y].color = "#999999";
-            tiles[oni_x][oni_y].draw();*/
             mn = 20.0;
             for (i = 0; i < 4; ++i) {
                 tx = oni_x + dx[i][0], ty = oni_y + dx[i][1];
@@ -395,15 +394,11 @@ class CanvasOp {
                 }
             }
             oni_x += dx[vc[0]][0], oni_y += dx[vc[0]][1];
-          /*  tiles[oni_x][oni_y].color = ONI_COLOR;
-            tiles[oni_x][oni_y].draw();*/
             eps = Math.random() / C - 1.0 / (2 * C);
         }
         window.requestAnimationFrame((timestamp) => this.update(timestamp));
     }
 }
-
-const ONI_COLOR = "#999999";
 
 fontFace.load().then(function (loadedFace) {
     document.fonts.add(loadedFace);
@@ -431,6 +426,7 @@ window.onload = function () {
     if (s == 4) {
         oni_x = 0, oni_y = 3;
     }
+    const ctx = CORE.ctx;
     for (let i = 0; i < 5; i++) {
         tiles[i] = [];
         for (let j = 0; j < 5; j++) {
@@ -439,36 +435,34 @@ window.onload = function () {
             tile.y = i * tileSize + i * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - LL;
             tile.row = i;
             tile.col = j;
-            if (i == 4 && j == 0) {
-                tile.color = RED;
-                tile.draw();
-            }
-            if (i == oni_x && j == oni_y) {
-                tile.color = ONI_COLOR;
-                tile.draw();
-            }
             tiles[i][j] = tile;
         }
     }
     for (let i = 0; i < 6; i++) {
         for (let j = 0; j < 6; j++) {
+            if ((i != 0 && i != 5) && (j != 0 && j != 5)) {
+                continue;
+            }
             const tile = new Block();
             tile.x = j * tileSize + j * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2 - margin;
             tile.y = i * tileSize + i * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - LL - margin;
             tile.row = margin;
             tile.col = margin;
-            tile.color = "#000000";
+            tile.color = "#333333";
             tile.draw();
         }
     }
     for (i = 0; i < 5; ++i) {
         for (j = 0; j < 6; ++j) {
+            if (j != 0 && j != 5) {
+                continue;
+            }
             const tile = new Block();
             tile.x = j * tileSize + (j - 1) * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2;
             tile.y = i * tileSize + i * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - LL;
-            tile.row = margin;
+            tile.row = 7;
             tile.col = tileSize;
-            tile.color = "#000000";
+            tile.color = "#333333";
             tile.draw();
         }
     }
@@ -477,19 +471,22 @@ window.onload = function () {
         const tile = new Block();
         tile.x = j * tileSize + (j - 1) * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2;
         tile.y = i * tileSize + i * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - LL;
-        tile.row = margin;
+        tile.row = 7;
         tile.col = tileSize;
-        tile.color = "#11aa11";
+        tile.color = "#333333";
         tile.draw();
     }
     for (i = 0; i < 6; ++i) {
+        if (i != 0 && i != 5) {
+            continue;
+        }
         for (j = 0; j < 5; ++j) {
             const tile = new Block();
             tile.x = j * tileSize + j * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2;
             tile.y = i * tileSize + (i - 1) * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - LL;
             tile.row = tileSize;
-            tile.col = margin;
-            tile.color = "#000000";
+            tile.col = 7;
+            tile.color = "#333333";
             tile.draw();
         }
     }
@@ -499,8 +496,8 @@ window.onload = function () {
         tile.x = j * tileSize + j * margin + margin * 0.5 + (CANVAS_WIDTH - (tileSize + margin) * 5) / 2;
         tile.y = i * tileSize + (i - 1) * margin + margin * 0.5 + (CANVAS_HEIGHT - (tileSize + margin) * 5) / 2 - LL;
         tile.row = tileSize;
-        tile.col = margin;
-        tile.color = "#11aa11";
+        tile.col = 7;
+        tile.color = "#333333";
         tile.draw();
     }
     
@@ -518,10 +515,8 @@ window.onload = function () {
             }
         }
         if (isEnd) {
-            /*tiles[oni_x][oni_y].color = "#999999";
-            tiles[oni_x][oni_y].draw();*/
-            tiles[now_x][now_y].color = "#999999";
-            tiles[now_x][now_y].draw();
+            const ctx = CORE.ctx;
+            ctx.clearRect(tiles[now_x][now_y].x + 3, tiles[now_x][now_y].y+ 3, tileSize - 6, tileSize - 6);
             now_x = 4, now_y = 0;
             s = getRandomInt(5);
             if (s == 0) {
@@ -539,10 +534,6 @@ window.onload = function () {
             if (s == 4) {
                 oni_x = 0, oni_y = 3;
             }
-            tiles[now_x][now_y].color = "#ffffff";
-            tiles[now_x][now_y].draw();
-         /*   tiles[oni_x][oni_y].color = ONI_COLOR;
-            tiles[oni_x][oni_y].draw();*/
             eps = Math.random() / C - 1.0 / (2 * C);
             turn = 1;
             flag = 0;
@@ -578,10 +569,8 @@ function checkTiles0(e) {
         now_x -= 1;
         const row = tile.row;
         const col = tile.col;
-        tiles[i - 1][j].color = RED;
-        tiles[i - 1][j].draw();
-        tiles[i][j].color = BLUE;
-        tiles[i][j].draw();
+        const ctx = CORE.ctx;
+        ctx.clearRect(tiles[i][j].x + 3, tiles[i][j].y + 3, tileSize - 6, tileSize - 6);
         return true;
     }
     return false;
@@ -604,10 +593,8 @@ function checkTiles1(e) {
         now_x += 1;
         const row = tile.row;
         const col = tile.col;
-        tiles[i + 1][j].color = RED;
-        tiles[i + 1][j].draw();
-        tiles[i][j].color = BLUE;
-        tiles[i][j].draw();
+        const ctx = CORE.ctx;
+        ctx.clearRect(tiles[i][j].x + 3, tiles[i][j].y + 3, tileSize - 6, tileSize - 6);
         return true;
     }
     return false;
@@ -630,10 +617,8 @@ function checkTiles2(e) {
         now_y -= 1;
         const row = tile.row;
         const col = tile.col;
-        tiles[i][j - 1].color = RED;
-        tiles[i][j - 1].draw();
-        tiles[i][j].color = BLUE;
-        tiles[i][j].draw();
+        const ctx = CORE.ctx;
+        ctx.clearRect(tiles[i][j].x + 3, tiles[i][j].y + 3, tileSize - 6, tileSize - 6);
         return true;
     }
     return false;
@@ -656,10 +641,8 @@ function checkTiles3(e) {
         now_y += 1;
         const row = tile.row;
         const col = tile.col;
-        tiles[i][j + 1].color = RED;
-        tiles[i][j + 1].draw();
-        tiles[i][j].color = BLUE;
-        tiles[i][j].draw();
+        const ctx = CORE.ctx;
+        ctx.clearRect(tiles[i][j].x + 3, tiles[i][j].y + 3, tileSize - 6, tileSize - 6);
         return true;
     }
     return false;
