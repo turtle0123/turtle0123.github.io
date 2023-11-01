@@ -197,10 +197,10 @@ class CanvasOp {
             ctx.fillText("それでは、お楽しみください。", (CW - textWidth) / 2, 320 + 8 * T);
             textWidth = ctx.measureText("このゲームが面白いと思ったら").width;
             ctx.fillText("このゲームが面白いと思ったら", (CW - textWidth) / 2, 320 + 9 * T);
-            textWidth = ctx.measureText("是非 1-3 HR にお越しください。").width;
-            ctx.fillText("是非        にお越しください。", (CW - textWidth) / 2, 320 + 10 * T);
+            textWidth = ctx.measureText("是非 1-3 HR への大衆賞を！").width;
+            ctx.fillText("是非        への大衆賞を！", (CW - textWidth) / 2, 320 + 10 * T);
             ctx.font = "35px deathspirit";
-            ctx.fillText("　　  1-3 HR 　　　　　　　　　", (CW - textWidth) / 2, 320 + 10 * T);
+            ctx.fillText("　　  1-3 HR 　　　　　　　", (CW - textWidth) / 2, 320 + 10 * T);
             ctx.font = "35px nemuke";
             if (performance.now() / 1000 - Math.floor(performance.now() / 1000) <= 0.4) {
                 ctx.font = "40px deathspirit";
