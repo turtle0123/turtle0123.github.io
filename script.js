@@ -186,7 +186,7 @@ class CanvasOp {
             textWidth = ctx.measureText("鬼から逃げ切ってゴールに").width;
             ctx.fillText("鬼から逃げ切ってゴールに", (CW - textWidth) / 2, 320 + 3 * T);
             textWidth = ctx.measureText("たどり着けばクリアです。").width;
-            ctx.fillText("たどり着けばクリアです", (CW - textWidth) / 2, 320 + 4 * T);
+            ctx.fillText("たどり着けばクリアです。", (CW - textWidth) / 2, 320 + 4 * T);
             textWidth = ctx.measureText("鬼の位置は見えませんが、").width;
             ctx.fillText("鬼の位置は見えませんが、", (CW - textWidth) / 2, 320 + 5 * T);
             textWidth = ctx.measureText("センサーによって鬼の").width;
