@@ -193,7 +193,7 @@
         textNodes.forEach(textNode => {
             if (textNode.parentNode.closest('.ruby-parsed')) return;
             const originalText = textNode.nodeValue;
-            let html_tmp = parse(originalText).normalize("NFC");
+            let html_tmp = parse(originalText.normalize("NFC"));
             let html = html_tmp[0];
             let element_lst = html_tmp[1];
             const span = document.createElement('span');
@@ -339,7 +339,7 @@
 
     function loadDict(data) {
         dict = data;
-        parseDict(dict.dict);
+        parseDict(dict.dict.normalize("NFC"));
     }
 
     /*chrome.runtime.getURL("generated_chars1.json")
