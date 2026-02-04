@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ベトナム語漢字変換
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.1
 // @description  ベトナム語で書かれた文章のうち、漢語に由来するものを漢字に変換します。
 // @match        https://vi.wikipedia.org/*
 // @author       ytqm3
@@ -210,6 +210,9 @@
     function observeSite() {
         const observer = new MutationObserver(mutations => {
             for (const m of mutations) {
+                if (m.type === 'attributes') {
+                    processAllTextNodes(m.target);
+                }
                 for (const node of m.addedNodes) {
                     if (node.nodeType === Node.ELEMENT_NODE) {
                         processAllTextNodes(node);
@@ -220,7 +223,9 @@
 
         observer.observe(document.body, {
             childList: true,
-            subtree: true
+            subtree: true,
+            attributes: true,
+            attributeFilter: ['style', 'class']
         });
     }
 
@@ -359,5 +364,6 @@
     } else {
         start();
     }
+
 
 })();
