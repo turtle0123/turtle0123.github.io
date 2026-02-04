@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ベトナム語漢字変換
 // @namespace    http://tampermonkey.net/
-// @version      1.1
+// @version      1.1.1
 // @description  ベトナム語で書かれた文章のうち、漢語に由来するものを漢字に変換します。
 // @match        https://vi.wikipedia.org/*
 // @author       ytqm3
