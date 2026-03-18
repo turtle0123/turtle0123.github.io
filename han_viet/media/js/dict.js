@@ -219,7 +219,7 @@
                 for (var j = ((lst[i][0] == ".") ? 1 : 0); j < lst[i].length; ++j) {
                     if (lst[i][j] == "[") {
                         flag = 1;
-                        read += "(SV:";
+                        read += " (漢越 : ";
                         continue;
                     }
                     if (lst[i][j] == "]") {
@@ -333,12 +333,6 @@
             var lst = [];
             if (p1 < p2) {
                 lst = listCandidate(this.value.substr(p1, p2 - p1));
-                var str = "";
-                for (var i = 0; i < lst.length; ++i) {
-                    str += lst[i].PRIORITY + "." + lst[i].HANZI + " " + lst[i].READ + " " + lst[i].COUNT;
-                    str += "<br>";
-                }
-                $("#typer-info-entries").html(str);
             } else {
                 for (var t = Math.max(0, p2 - LOOK_LENGTH); t < p2; t++) {
                     if (this.value[t] == " ") {
@@ -351,14 +345,20 @@
                     }
                     lst = lst.concat(listCandidate(this.value.substr(t, p2 - t)));
                 }
-                var str = "";
-                for (var i = 0; i < lst.length; ++i) {
-                    str += lst[i].PRIORITY + "." + lst[i].HANZI + " " + lst[i].READ + " " + lst[i].COUNT;
-                    str += "<br>";
-                }
-                $("#typer-info-entries").html(str);
             }
-            console.log(evt);
+            var str = "";
+            for (var i = 0; i < lst.length; ++i) {
+                if (lst[i].PRIORITY == 1) {
+                    str += "<font color=\"#ba7e24\"><font size=+2>" + lst[i].HANZI + "</font>　読み : " + lst[i].READ.replaceAll("_", " ") + "　出現数 : " + lst[i].COUNT + "</font><br>";
+                }
+                if (lst[i].PRIORITY == 2) {
+                    str += "<font size=+2>" + lst[i].HANZI + "</font>　読み : " + lst[i].READ.replaceAll("_", " ") + "　出現数 : " + lst[i].COUNT + "<br>";
+                }
+                if (lst[i].PRIORITY == 3) {
+                    str += "<font color=\"#679090\"><font size=+2>" + lst[i].HANZI + "</font>　読み : " + lst[i].READ.replaceAll("_", " ") + "　出現数 : " + lst[i].COUNT + "</font><br>";
+                }
+            }
+            $("#typer-info-entries").html(str);
         });
     };
     function listChanged(list, items, page, pages) {

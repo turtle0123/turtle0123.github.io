@@ -160,7 +160,7 @@ var VNKeys = new function () {
         return getUserMethod()[charStr];
     }
 
-    function convertToViet(charStr) {
+    function convertToViet(charStr, prevChar) {
         if (_currentPosition > 0) {
             var ch = _currentValue.substr(_currentPosition - 1, 1);
             if (ch == DAU_THOAT) {
@@ -183,7 +183,7 @@ var VNKeys = new function () {
                 if (dau == DAU.NANG) {
                     return _mapNang[ch];
                 }
-                if (dau == DAU.MU) {
+                if (dau == DAU.MU && prevChar == charStr) {
                     return _mapMu[ch];
                 }
                 if (dau == DAU.MOC) {
@@ -220,6 +220,7 @@ var VNKeys = new function () {
 
         // Get the last input character
         var inputChar = val.charAt(start - 1);
+        var prevChar = (start == 1 ? null : val.charAt(start - 2));
 
         // Check if the last character is Space or Enter
         if (inputChar === ' ') {
@@ -233,7 +234,7 @@ var VNKeys = new function () {
         start = this.selectionStart - 1;
         _currentPosition = start;
         // Transform the typed character
-        var mappedChar = convertToViet(inputChar);
+        var mappedChar = convertToViet(inputChar, prevChar);
         if (mappedChar != null) {
             if (typeof this.selectionStart === "number" && typeof this.selectionEnd === "number") {
                 var end = this.selectionEnd; // Local variable for selection end
