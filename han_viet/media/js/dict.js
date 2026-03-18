@@ -175,7 +175,10 @@
         IS_DICT_LOADED = 1;
     }
 
-    function listCandidate(str) {
+    function listCandidate(str, p1, p2) {
+        while (str[p2 - p1 - 1] == " ") {
+            p2--;
+        }
         //$("#typer-info-entries").html(str);
         str = str.toLowerCase();
         str = str.normalize("NFC");
@@ -236,11 +239,11 @@
                 if (lst[i][0] == ".") {
                     var cnt = dict_map3.get(str + (lst[i][0] == "." ? lst[i].substring(1) : lst[i]));
                     if (cnt == undefined) cnt = 0;
-                    List.push({ HANZI: hanzi, READ: read, PRIORITY: 1, COUNT: cnt });
+                    List.push({ HANZI: hanzi, READ: read, PRIORITY: 1, COUNT: cnt, P1: p1, P2: p2 });
                 } else {
                     var cnt = dict_map3.get(str + (lst[i][0] == "." ? lst[i].substring(1) : lst[i]));
                     if (cnt == undefined) cnt = 0;
-                    List.push({ HANZI: hanzi, READ: read, PRIORITY: 2, COUNT: cnt });
+                    List.push({ HANZI: hanzi, READ: read, PRIORITY: 2, COUNT: cnt, P1: p1, P2: p2 });
                 }
             }
         }
@@ -276,7 +279,7 @@
                 }
                 var cnt = dict_map3.get(str + lst[i]);
                 if (cnt == undefined) cnt = 0;
-                List.push({ HANZI: hanzi, READ: read, PRIORITY: 3, COUNT: cnt });
+                List.push({ HANZI: hanzi, READ: read, PRIORITY: 3, COUNT: cnt, P1: p1, P2: p2 });
             }
         }
 
@@ -299,6 +302,7 @@
     }
 
     let LOOK_LENGTH = 60;
+    let lst = [];
     DICTClass.prototype.initialize = function (isFirstInit) {
         var $node = $(this.node);
 
@@ -328,11 +332,22 @@
         }
 
         $node.bind("keyup.ime", function (evt) {
-
             var p1 = this.selectionStart, p2 = this.selectionEnd;
-            var lst = [];
+            if (48 <= evt.keyCode && evt.keyCode <= 57 && p1 == p2) {
+                let num = evt.keyCode - 48;
+                if (num == 0) num = 10;
+                //lst[num-1] を選択
+                if (lst.length < num) {
+                    return;
+                }
+                let SELECT = this.selectionStart - (lst[num - 1].P2 - lst[num - 1].P1) + lst[num - 1].HANZI.length - 1;
+                this.value = this.value.substr(0, this.selectionStart - 1) + this.value.substr(this.selectionStart);
+                this.value = this.value.substr(0, lst[num - 1].P1) + lst[num - 1].HANZI + this.value.substr(lst[num - 1].P2);
+                this.selectionStart = SELECT, this.selectionEnd = SELECT;
+            }
+            lst = [];
             if (p1 < p2) {
-                lst = listCandidate(this.value.substr(p1, p2 - p1));
+                //lst = listCandidate(this.value.substr(p1, p2 - p1), p1, p2);
             } else {
                 for (var t = Math.max(0, p2 - LOOK_LENGTH); t < p2; t++) {
                     if (this.value[t] == " ") {
@@ -343,19 +358,19 @@
                             continue;
                         }
                     }
-                    lst = lst.concat(listCandidate(this.value.substr(t, p2 - t)));
+                    lst = lst.concat(listCandidate(this.value.substr(t, p2 - t), t, p2));
                 }
             }
             var str = "";
             for (var i = 0; i < lst.length; ++i) {
                 if (lst[i].PRIORITY == 1) {
-                    str += "<font color=\"#ba7e24\"><font size=+2>" + lst[i].HANZI + "</font>　読み : " + lst[i].READ.replaceAll("_", " ") + "　出現数 : " + lst[i].COUNT + "</font><br>";
+                    str += "<font color=\"#ba7e24\">" + ((i + 1) % 10) + ": <font size=+2>" + lst[i].HANZI + "</font>　読み : " + lst[i].READ.replaceAll("_", " ") + "　出現数 : " + lst[i].COUNT + "</font><br>";
                 }
                 if (lst[i].PRIORITY == 2) {
-                    str += "<font size=+2>" + lst[i].HANZI + "</font>　読み : " + lst[i].READ.replaceAll("_", " ") + "　出現数 : " + lst[i].COUNT + "<br>";
+                    str += ((i + 1) % 10) + ": <font size=+2>" + lst[i].HANZI + "</font>　読み : " + lst[i].READ.replaceAll("_", " ") + "　出現数 : " + lst[i].COUNT + "<br>";
                 }
                 if (lst[i].PRIORITY == 3) {
-                    str += "<font color=\"#679090\"><font size=+2>" + lst[i].HANZI + "</font>　読み : " + lst[i].READ.replaceAll("_", " ") + "　出現数 : " + lst[i].COUNT + "</font><br>";
+                    str += "<font color=\"#679090\">" + ((i + 1) % 10) + ": <font size=+2>" + lst[i].HANZI + "</font>　読み : " + lst[i].READ.replaceAll("_", " ") + "　出現数 : " + lst[i].COUNT + "</font><br>";
                 }
             }
             $("#typer-info-entries").html(str);
