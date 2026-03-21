@@ -49,15 +49,6 @@
                 }
                 i++;
             }
-            let chu_quoc_lst = chu_quoc.split("_");
-            if (g == 0) {
-                SV = chu_quoc;
-            }
-
-            let SV_lst = SV.split(/[_\/]/);
-            if (g) {
-                chu_han += "[" + SV + "]";
-            }
             chu_quoc = chu_quoc.toLowerCase();
 
             chu_quoc = chu_quoc.replaceAll("òa", "oà");
@@ -111,7 +102,23 @@
                 }
             }
             let check_map = new Map();
+            let chu_han_copy = chu_han;
+            let IS_SV = [];
+
+            {
+                let chu_quoc_lst = chu_quoc.split("_");
+                if (g == 0) {
+                    SV = chu_quoc;
+                }
+                let SV_lst = SV.split(/[_\/]/);
+                for (let k = 0; k < chu_quoc_lst.length; ++k) {
+                    if (chu_quoc_lst[k] != SV_lst[k]) {
+                        IS_SV[k] = 1;
+                    }
+                }
+            }
             for (let t = 0; t < (1 << iy_idx.length); ++t) {
+                chu_han = chu_han_copy;
                 for (let j = 0; j < iy_idx.length; ++j) {
                     if ((t >> j) & 1) {
                         chu_quoc = chu_quoc.substring(0, iy_idx[j]) + i_lst[j] + chu_quoc.substring(iy_idx[j] + 1);
@@ -119,6 +126,16 @@
                         chu_quoc = chu_quoc.substring(0, iy_idx[j]) + y_lst[j] + chu_quoc.substring(iy_idx[j] + 1);
                     }
                 }
+                let chu_quoc_lst = chu_quoc.split("_");
+                if (g == 0) {
+                    SV = chu_quoc;
+                }
+
+                let SV_lst = SV.split(/[_\/]/);
+                if (g) {
+                    chu_han += "[" + SV + "]";
+                }
+
                 if (dict_map.get(chu_quoc) == undefined) {
                     dict_map.set(chu_quoc, [chu_han]);
                 }
@@ -128,7 +145,7 @@
                 if (chu_quoc_lst.length >= 2) {
                     for (let k = 0; k < chu_quoc_lst.length; ++k) {
                         let cq = chu_quoc_lst[k], ch = chu_han[(chu_han[0] == ".") ? (k + 1) : k];
-                        if (chu_quoc_lst[k] != SV_lst[k]) {
+                        if (IS_SV[k] == 1) {
                             ch += "[" + SV_lst[k] + "]";
                         }
                         if (dict_map2.get(cq) == undefined) {
@@ -255,7 +272,7 @@
                 for (var j = ((lst[i][0] == ".") ? 1 : 0); j < lst[i].length; ++j) {
                     if (lst[i][j] == "[") {
                         flag = 1;
-                        read += "(SV:";
+                        read += " (漢越 : ";
                         continue;
                     }
                     if (lst[i][j] == "]") {
@@ -303,6 +320,9 @@
 
     let LOOK_LENGTH = 60;
     let lst = [];
+    function add_aw() {
+        //document.getElementById("typer-text").value += "aw";
+    }
     DICTClass.prototype.initialize = function (isFirstInit) {
         var $node = $(this.node);
 
@@ -375,19 +395,6 @@
             }
             $("#typer-info-entries").html(str);
         });
-    };
-    function listChanged(list, items, page, pages) {
-        if (items == 0) return $("#typer-candidates, #typer-info-entries, #typer-info-pages").html("");
-        if (list && list != "") $("#typer-candidates").html("").append(list);
-        $("#typer-info-entries").html(items + " Entries");
-        var up = '', down = '';
-        if (page > 1) up = '<span>▲</span>';
-        if (page < pages) down = '<span>▼</span>';
-        console.log(list, items, page, pages)
-        $("#typer-info-pages").html("<b>" + up + down + page + "/" + pages + "</b><br><small>(use PgUp/PgDown to navigate)</small>");
-    }
-    function updateCandidates(container, items, page, pages) {
-        listChanged(container, items, page, pages)
     };
     function DICTClass(node, opts) {
         this.id = ID++;
