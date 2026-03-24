@@ -211,6 +211,17 @@ $(window).ready(function () {
         }));
     });
 
+
+    let is_tonal = document.getElementById("is_tonal");
+
+    is_tonal.addEventListener("click", () => {
+        let typer = document.getElementById("typer-text");
+        typer.focus();
+        typer.dispatchEvent(new KeyboardEvent("keyup", {
+            bubbles: true,
+            cancelable: true
+        }));
+    });
     //input[type="text"]
     $('input, textarea').dictionary().focus();
 });
