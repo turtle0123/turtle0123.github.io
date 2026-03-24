@@ -213,15 +213,49 @@ $(window).ready(function () {
 
 
     let is_tonal = document.getElementById("is_tonal");
+    let is_pref = document.getElementById("is_pref");
+    let is_suff = document.getElementById("is_suff");
 
     is_tonal.addEventListener("click", () => {
         let typer = document.getElementById("typer-text");
+        if (document.getElementById('is_tonal').checked) {
+            document.getElementById('is_pref').checked = false;
+            document.getElementById('is_suff').checked = false;
+        }
         typer.focus();
         typer.dispatchEvent(new KeyboardEvent("keyup", {
             bubbles: true,
             cancelable: true
         }));
     });
+
+    is_pref.addEventListener("click", () => {
+        let typer = document.getElementById("typer-text");
+        if (document.getElementById('is_pref').checked) {
+            document.getElementById('is_tonal').checked = false;
+            document.getElementById('is_suff').checked = false;
+        }
+        typer.focus();
+        typer.dispatchEvent(new KeyboardEvent("keyup", {
+            bubbles: true,
+            cancelable: true
+        }));
+    });
+
+    is_suff.addEventListener("click", () => {
+        let typer = document.getElementById("typer-text");
+        if (document.getElementById('is_suff').checked) {
+            document.getElementById('is_tonal').checked = false
+            document.getElementById('is_pref').checked = false;
+        }
+        typer.focus();
+        typer.dispatchEvent(new KeyboardEvent("keyup", {
+            bubbles: true,
+            cancelable: true
+        }));
+    });
+
+
     //input[type="text"]
     $('input, textarea').dictionary().focus();
 });
