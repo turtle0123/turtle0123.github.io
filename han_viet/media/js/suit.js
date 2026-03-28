@@ -215,12 +215,14 @@ $(window).ready(function () {
     let is_tonal = document.getElementById("is_tonal");
     let is_pref = document.getElementById("is_pref");
     let is_suff = document.getElementById("is_suff");
+    let is_hanzi = document.getElementById("is_hanzi");
 
     is_tonal.addEventListener("click", () => {
         let typer = document.getElementById("typer-text");
         if (document.getElementById('is_tonal').checked) {
             document.getElementById('is_pref').checked = false;
             document.getElementById('is_suff').checked = false;
+            document.getElementById('is_hanzi').checked = false;
         }
         typer.focus();
         typer.dispatchEvent(new KeyboardEvent("keyup", {
@@ -234,6 +236,7 @@ $(window).ready(function () {
         if (document.getElementById('is_pref').checked) {
             document.getElementById('is_tonal').checked = false;
             document.getElementById('is_suff').checked = false;
+            document.getElementById('is_hanzi').checked = false;
         }
         typer.focus();
         typer.dispatchEvent(new KeyboardEvent("keyup", {
@@ -247,6 +250,21 @@ $(window).ready(function () {
         if (document.getElementById('is_suff').checked) {
             document.getElementById('is_tonal').checked = false
             document.getElementById('is_pref').checked = false;
+            document.getElementById('is_hanzi').checked = false;
+        }
+        typer.focus();
+        typer.dispatchEvent(new KeyboardEvent("keyup", {
+            bubbles: true,
+            cancelable: true
+        }));
+    });
+
+    is_hanzi.addEventListener("click", () => {
+        let typer = document.getElementById("typer-text");
+        if (document.getElementById('is_hanzi').checked) {
+            document.getElementById('is_pref').checked = false;
+            document.getElementById('is_tonal').checked = false;
+            document.getElementById('is_suff').checked = false;
         }
         typer.focus();
         typer.dispatchEvent(new KeyboardEvent("keyup", {
